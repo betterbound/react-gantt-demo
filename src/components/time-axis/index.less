@@ -14,7 +14,6 @@
     top: 0;
     left: 0;
     height: 56px;
-    pointer-events: none;
     user-select: none;
     will-change: transform;
   }
@@ -53,6 +52,10 @@
     font-size: 12px;
     line-height: 28px;
     color: #202d40;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
     &.weekends {
       background-color: hsla(0, 0%, 96.9%, 0.5);
     }
