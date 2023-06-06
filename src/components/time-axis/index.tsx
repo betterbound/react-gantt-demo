@@ -60,11 +60,11 @@ const TimeAxis: React.FC = () => {
             </div>
           ))}
           {minorList.map(item => (
-            <a
+            <button
               key={item.key}
+              type='button'
               className={classNames(`${prefixClsTimeAxis}-minor`)}
               style={{ width: item.width, left: item.left }}
-              href='#'
             >
               <span
                 className={classNames(`${prefixClsTimeAxis}-minor-label`, {
@@ -73,7 +73,7 @@ const TimeAxis: React.FC = () => {
               >
                 {item.label}
               </span>
-            </a>
+            </button>
           ))}
         </div>
       </div>
