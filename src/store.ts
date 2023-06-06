@@ -513,7 +513,10 @@ class GanttStore {
     const getMinorKey = (date: Dayjs) => {
       if (this.sightConfig.type === 'halfYear')
         return date.format(format) + (fstHalfYear.has(date.month()) ? this.locale.firstHalf : this.locale.secondHalf)
-
+      if (this.sightConfig.type === 'week') {
+        const weekInMonth = Math.ceil((date.date() - dayjs(date).startOf('month').day() + 1) / 7)
+        return `${weekInMonth}w`
+      }
       return date.format(format)
     }
 
