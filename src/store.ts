@@ -390,7 +390,7 @@ class GanttStore {
 
     // 对可视区域内的时间进行迭代
     while (currentDate.isBetween(translateAmp - 1, endAmp + 1)) {
-      const majorKey = currentDate.format(format)
+      const majorKey = currentDate.format('YYYY/MM')
 
       let start = currentDate
       const end = getEnd(start)
