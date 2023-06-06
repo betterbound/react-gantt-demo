@@ -71,7 +71,7 @@
     "cross-env": "^7.0.3",
     "cz-customizable": "^6.3.0",
     "dumi": "^1.1.23",
-    "husky": "^4.3.6",
+    "husky": "^4.3.8",
     "identity-obj-proxy": "^3.0.0",
     "less": "^3.12.2",
     "less-loader": "^7.1.0",
