@@ -1,5 +1,5 @@
-import { Dayjs } from 'dayjs'
-import React from 'react'
+import type { Dayjs } from 'dayjs'
+import type React from 'react'
 
 export type DefaultRecordType = Record<string, any>
 export namespace Gantt {
@@ -26,12 +26,13 @@ export namespace Gantt {
     startDate: Dayjs
     endDate: Dayjs
   }
-  export type Sight = 'day' | 'week' | 'month' | 'quarter' | 'halfYear'
+  export type Sight = 'day' | 'week' | 'week_in_month' |'month' | 'quarter' | 'halfYear'
   export type MoveType = 'left' | 'right' | 'move' | 'create'
 
   export enum ESightValues {
     day = 2880,
     week = 3600,
+    week_in_month = 3600,
     month = 14400,
     quarter = 86400,
     halfYear = 115200,
