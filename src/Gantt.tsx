@@ -93,6 +93,7 @@ export interface GanttLocale {
   majorFormat: {
     day: string
     week: string
+    week_in_month: string
     month: string
     quarter: string
     halfYear: string
@@ -100,6 +101,7 @@ export interface GanttLocale {
   minorFormat: {
     day: string
     week: string
+    week_in_month: string
     month: string
     quarter: string
     halfYear: string
