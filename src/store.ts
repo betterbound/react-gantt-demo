@@ -164,7 +164,7 @@ class GanttStore {
   isRestDay = isRestDay
 
   getStartDate() {
-    return dayjs().subtract(15, 'day').toString()
+    return dayjs().subtract(10, 'day').toString()
   }
  
   getFirstDayOfLastMonth() {
