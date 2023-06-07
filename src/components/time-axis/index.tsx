@@ -60,19 +60,20 @@ const TimeAxis: React.FC = () => {
             </div>
           ))}
           {minorList.map(item => (
-            <div
+            <button
               key={item.key}
+              type='button'
               className={classNames(`${prefixClsTimeAxis}-minor`)}
               style={{ width: item.width, left: item.left }}
             >
-              <div
+              <span
                 className={classNames(`${prefixClsTimeAxis}-minor-label`, {
                   [`${prefixClsTimeAxis}-today`]: getIsToday(item),
                 })}
               >
                 {item.label}
-              </div>
-            </div>
+              </span>
+            </button>
           ))}
         </div>
       </div>

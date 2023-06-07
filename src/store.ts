@@ -39,6 +39,11 @@ export const getViewTypeList = locale => {
       value: Gantt.ESightValues.week,
     },
     {
+      type: 'week_in_month',
+      label: locale.week_in_month,
+      value: Gantt.ESightValues.week_in_month,
+    },
+    {
       type: 'month',
       label: locale.month,
       value: Gantt.ESightValues.month,
@@ -357,6 +362,7 @@ class GanttStore {
     const majorFormatMap: { [key in Gantt.Sight]: string } = {
       day: this.locale.majorFormat.day,
       week: this.locale.majorFormat.week,
+      week_in_month: this.locale.majorFormat.week_in_month,
       month: this.locale.majorFormat.month,
       quarter: this.locale.majorFormat.quarter,
       halfYear: this.locale.majorFormat.halfYear,
@@ -367,19 +373,19 @@ class GanttStore {
     const format = majorFormatMap[type]
 
     const getNextDate = (start: Dayjs) => {
-      if (type === 'day' || type === 'week') return start.add(1, 'month')
+      if (type === 'day' || type === 'week' || type === 'week_in_month') return start.add(1, 'month')
 
       return start.add(1, 'year')
     }
 
     const getStart = (date: Dayjs) => {
-      if (type === 'day' || type === 'week') return date.startOf('month')
+      if (type === 'day' || type === 'week' || type === 'week_in_month') return date.startOf('month')
 
       return date.startOf('year')
     }
 
     const getEnd = (date: Dayjs) => {
-      if (type === 'day' || type === 'week') return date.endOf('month')
+      if (type === 'day' || type === 'week' || type === 'week_in_month') return date.endOf('month')
 
       return date.endOf('year')
     }
@@ -432,6 +438,7 @@ class GanttStore {
     const minorFormatMap = {
       day: this.locale.minorFormat.day,
       week: this.locale.minorFormat.week,
+      week_in_month: this.locale.minorFormat.week_in_month,
       month: this.locale.minorFormat.month,
       quarter: this.locale.minorFormat.quarter,
       halfYear: this.locale.minorFormat.halfYear,
@@ -449,6 +456,9 @@ class GanttStore {
           return start.add(1, 'day')
         },
         week() {
+          return start.add(1, 'week')
+        },
+        week_in_month() {
           return start.add(1, 'week')
         },
         month() {
@@ -470,6 +480,9 @@ class GanttStore {
           return date.startOf('day')
         },
         week() {
+          return date.weekday(1).hour(0).minute(0).second(0)
+        },
+        week_in_month() {
           return date.weekday(1).hour(0).minute(0).second(0)
         },
         month() {
@@ -495,6 +508,9 @@ class GanttStore {
         week() {
           return start.weekday(7).hour(23).minute(59).second(59)
         },
+        week_in_month() {
+          return start.weekday(7).hour(23).minute(59).second(59)
+        },
         month() {
           return start.endOf('month')
         },
@@ -513,7 +529,7 @@ class GanttStore {
     const getMinorKey = (date: Dayjs) => {
       if (this.sightConfig.type === 'halfYear')
         return date.format(format) + (fstHalfYear.has(date.month()) ? this.locale.firstHalf : this.locale.secondHalf)
-      if (this.sightConfig.type === 'week') {
+      if (this.sightConfig.type === 'week_in_month') {
         const weekInMonth = Math.ceil((date.date() - dayjs(date).startOf('month').day() + 1) / 7)
         return `${weekInMonth}w`
       }

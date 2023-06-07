@@ -14,7 +14,7 @@ function createData(len: number) {
   for (let i = 0; i < len; i++) {
     result.push({
       id: i,
-      name: 'Title' + i,
+      name: `Title${i}`,
       startDate: dayjs().subtract(-i, 'day').format('YYYY-MM-DD'),
       endDate: dayjs().add(i, 'day').format('YYYY-MM-DD'),
     })
@@ -36,6 +36,8 @@ const App = () => {
             width: 100,
           },
         ]}
+        unit="week_in_month"
+        showUnitSwitch={false}
         locale={enUS}
         onUpdate={async (row, startDate, endDate) => {
           console.log('update', row, startDate, endDate)
