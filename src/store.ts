@@ -164,7 +164,11 @@ class GanttStore {
   isRestDay = isRestDay
 
   getStartDate() {
-    return dayjs().subtract(10, 'day').toString()
+    return dayjs().subtract(15, 'day').toString()
+  }
+ 
+  getFirstDayOfLastMonth() {
+    return dayjs().subtract(1, 'month').startOf('month').toString()
   }
 
   setIsRestDay(function_: (date: string) => boolean) {
@@ -269,7 +273,7 @@ class GanttStore {
     const target = find(this.viewTypeList, { type })
     if (target) {
       this.sightConfig = target
-      this.setTranslateX(dayjs(this.getStartDate()).valueOf() / (target.value * 1000))
+      this.setTranslateX(dayjs(this.getFirstDayOfLastMonth()).valueOf() / (target.value * 1000))
     }
   }
 
@@ -899,5 +903,6 @@ class GanttStore {
     return target === now
   }
 }
+
 
 export default GanttStore
