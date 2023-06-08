@@ -605,6 +605,7 @@ class GanttStore {
     const map = {
       day: dayRect,
       week: weekRect,
+      week_in_month: weekRect,
       month: weekRect,
       quarter: monthRect,
       halfYear: monthRect,
