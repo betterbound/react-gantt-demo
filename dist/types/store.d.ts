@@ -75,6 +75,7 @@ declare class GanttStore {
     onUpdate: GanttProperties['onUpdate'];
     isRestDay: typeof isRestDay;
     getStartDate(): string;
+    getFirstDayOfLastMonth(): string;
     setIsRestDay(function_: (date: string) => boolean): void;
     setData(data: Gantt.Record[], startDateKey: string, endDateKey: string): void;
     toggleCollapse(): void;
@@ -116,7 +117,10 @@ declare class GanttStore {
         key: string;
     }[];
     getMinorList(): Gantt.Minor[];
-    startXRectBar: (startX: number) => any;
+    startXRectBar: (startX: number) => {
+        left: number;
+        width: number;
+    };
     minorAmp2Px(ampList: Gantt.MinorAmp[]): Gantt.Minor[];
     getTaskBarThumbVisible(barInfo: Gantt.Bar): boolean;
     scrollToBar(barInfo: Gantt.Bar, type: 'left' | 'right'): void;
