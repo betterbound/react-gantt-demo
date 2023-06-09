@@ -273,7 +273,10 @@ class GanttStore {
     const target = find(this.viewTypeList, { type })
     if (target) {
       this.sightConfig = target
-      this.setTranslateX(dayjs(this.getFirstDayOfLastMonth()).valueOf() / (target.value * 1000))
+      if(target.type === 'week_in_month')
+        this.setTranslateX(dayjs(this.getFirstDayOfLastMonth()).valueOf() / (target.value * 5000))
+      else
+        this.setTranslateX(dayjs(this.getStartDate()).valueOf() / (target.value * 1000))
     }
   }
 
@@ -346,7 +349,10 @@ class GanttStore {
 
   // 1px对应的毫秒数
   @computed get pxUnitAmp() {
-    return this.sightConfig.value * 1000
+    let pxUnit = this.sightConfig.value * 1000
+    if(this.sightConfig.type === 'week_in_month') pxUnit = this.sightConfig.value * 5000
+
+    return pxUnit
   }
 
   /** 当前开始时间毫秒数 */
@@ -599,6 +605,7 @@ class GanttStore {
     const map = {
       day: dayRect,
       week: weekRect,
+      week_in_month: weekRect,
       month: weekRect,
       quarter: monthRect,
       halfYear: monthRect,

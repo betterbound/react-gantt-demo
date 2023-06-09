@@ -238,7 +238,6 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
           {!hideTable && <TableBody />}
           <Chart />
         </main>
-        {!hideTable && <Divider />}
         {showBackToday && <TimeIndicator />}
         {showUnitSwitch && <TimeAxisScaleSelect />}
         <ScrollBar />
