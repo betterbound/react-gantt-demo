@@ -116,6 +116,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
     return `${daysWidth} ${daysWidth > 1 ? locale.days : locale.day}`
   }, [translateX, width, moveCalc, translateX])
 
+  const icon = data.record.icon
   return (
     <div
       role='none'
@@ -214,23 +215,24 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
           reachEdge={reachEdge}
           onBeforeResize={handleBeforeResize('move')}
         >
-          {renderBar ? (
-            renderBar(data, {
-              width: width + 1,
-              height: barHeight + 1,
-            })
-          ) : (
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              version='1.1'
-              width={width + 1}
-              height={barHeight + 1}
-              viewBox={`0 0 ${width + 1} ${barHeight + 1}`}
-            >
-              <path
-                fill={record.backgroundColor || (getBarColor && getBarColor(record).backgroundColor) || themeColor[0]}
-                stroke={record.borderColor || (getBarColor && getBarColor(record).borderColor) || themeColor[1]}
-                d={`
+          {icon || <>
+            { (renderBar ? (
+              renderBar(data, {
+                width: width + 1,
+                height: barHeight + 1,
+              })
+            ) : (
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                version='1.1'
+                width={width + 1}
+                height={barHeight + 1}
+                viewBox={`0 0 ${width + 1} ${barHeight + 1}`}
+              >
+                <path
+                  fill={record.backgroundColor || (getBarColor && getBarColor(record).backgroundColor) || themeColor[0]}
+                  stroke={record.borderColor || (getBarColor && getBarColor(record).borderColor) || themeColor[1]}
+                  d={`
               M${width - 2},0.5
               l-${width - 5},0
               c-0.41421,0 -0.78921,0.16789 -1.06066,0.43934
@@ -251,17 +253,19 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
               c-0.03256,-0.38255 -0.20896,-0.724 -0.47457,-0.97045
               c-0.26763,-0.24834 -0.62607,-0.40013 -1.01995,-0.40013z
             `}
-              />
-            </svg>
-          )}
+                />
+              </svg>
+            ))}
+          </>
+          }
         </DragResize>
       </div>
-      {(allowDrag || disabled || alwaysShowTaskBar) && (
+      {!icon && (allowDrag || disabled || alwaysShowTaskBar) && (
         <div className={`${prefixClsTaskBar}-label`} style={{ left: width / 2 - 10 }}>
           {days}
         </div>
       )}
-      {(stepGesture === 'moving' || allowDrag || alwaysShowTaskBar) && (
+      {!icon &&(stepGesture === 'moving' || allowDrag || alwaysShowTaskBar) && (
         <>
           <div className={`${prefixClsTaskBar}-date-text`} style={{ left: width + 16 }}>
             {renderRightText ? renderRightText(data) : dateTextFormat(translateX + width + moveCalc)}
