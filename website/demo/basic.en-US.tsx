@@ -7,6 +7,7 @@ interface Data {
   name: string
   startDate: string
   endDate: string
+  icon?: JSX.Element
 }
 
 function createData(len: number) {
@@ -17,6 +18,7 @@ function createData(len: number) {
       name: `Title${i}`,
       startDate: dayjs().subtract(-i, 'day').format('YYYY-MM-DD'),
       endDate: dayjs().add(i, 'day').format('YYYY-MM-DD'),
+      icon: <p>icon</p>
     })
   }
   return result
