@@ -1,0 +1,19 @@
+@import '../../style/themes/index';
+@task-bar-prefix-cls: ~'@{gantt-prefix}-task-bar';
+
+.@{task-bar-prefix-cls} {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+
+  &-loading {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    cursor: not-allowed;
+    z-index: 9;
+  }
+}
