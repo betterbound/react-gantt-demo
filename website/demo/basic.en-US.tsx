@@ -7,7 +7,12 @@ interface Data {
   name: string
   startDate: string
   endDate: string
-  icon?: JSX.Element
+  barItems?: {
+    id: string
+    icon: JSX.Element
+    startDate: string
+    endDate: string
+  }[]
 }
 
 function createData(len: number) {
@@ -18,7 +23,34 @@ function createData(len: number) {
       name: `Title${i}`,
       startDate: dayjs().subtract(-i, 'day').format('YYYY-MM-DD'),
       endDate: dayjs().add(i, 'day').format('YYYY-MM-DD'),
-      icon: <p>icon</p>
+      barItems: [
+        {
+          id: `${i}-1`,
+          icon: <span>A</span>,
+          startDate: dayjs().subtract(-i, 'week').format('YYYY-MM-DD'),
+          endDate: dayjs().add(i, 'week').format('YYYY-MM-DD'),
+        },
+        {
+          id: `${i}-2`,
+          icon: <span>B</span>,
+          startDate: dayjs()
+            .subtract(-i - 1, 'week')
+            .format('YYYY-MM-DD'),
+          endDate: dayjs()
+            .add(i + 1, 'week')
+            .format('YYYY-MM-DD'),
+        },
+        {
+          id: `${i}-3`,
+          icon: <span>C</span>,
+          startDate: dayjs()
+            .subtract(-i - 3, 'week')
+            .format('YYYY-MM-DD'),
+          endDate: dayjs()
+            .add(i + 3, 'week')
+            .format('YYYY-MM-DD'),
+        },
+      ],
     })
   }
   return result
@@ -38,7 +70,7 @@ const App = () => {
             width: 100,
           },
         ]}
-        unit="week_in_month"
+        unit='week_in_month'
         showUnitSwitch={false}
         locale={enUS}
         onUpdate={async (row, startDate, endDate) => {
