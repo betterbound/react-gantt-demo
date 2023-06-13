@@ -7,7 +7,6 @@ import './index.less'
 
 interface TaskBarProps {
   data: Gantt.Bar
-  index: number
   barItem: {
     id: string
     icon: JSX.Element
@@ -16,21 +15,17 @@ interface TaskBarProps {
   }
 }
 
-const TaskBarItems: React.FC<TaskBarProps> = ({ data, index, barItem }) => {
+const TaskBarItems: React.FC<TaskBarProps> = ({ data, barItem }) => {
   const { store, prefixCls } = useContext(Context)
-  const { loading } = data
+  const { loading, translateY } = data
 
   const prefixClsTaskBar = `${prefixCls}-task-bar`
-
-  const baseTop = store.rowHeight
-  const topStep = store.rowHeight
 
   const valid = barItem.startDate && barItem.endDate
   const startAmp = dayjs(barItem.startDate || 0)
     .startOf('day')
     .valueOf()
   const translateX = valid ? startAmp / store.pxUnitAmp : 0
-  const translateY = baseTop + index * topStep
 
   return (
     <div
@@ -41,13 +36,7 @@ const TaskBarItems: React.FC<TaskBarProps> = ({ data, index, barItem }) => {
       }}
     >
       {loading && <div className={`${prefixClsTaskBar}-loading`} />}
-      <div
-        style={{
-          transform: `translateY(50%) translateY(-${baseTop}px)`,
-        }}
-      >
-        {barItem.icon}
-      </div>
+      {barItem.icon}
     </div>
   )
 }
