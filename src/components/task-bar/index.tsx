@@ -6,7 +6,7 @@ import React, { useCallback, useContext, useMemo } from 'react'
 import { TOP_PADDING } from '../../constants'
 import Context from '../../context'
 import { ONE_DAY_MS } from '../../store'
-import { Gantt } from '../../types'
+import type { Gantt } from '../../types'
 import DragResize from '../drag-resize'
 import './index.less'
 
@@ -108,15 +108,14 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
   // 根据不同的视图确定拖动时的单位，在任何视图下都以一天为单位
   const grid = useMemo(() => ONE_DAY_MS / store.pxUnitAmp, [store.pxUnitAmp])
 
-  const moveCalc = -(width / store.pxUnitAmp);
+  const moveCalc = -(width / store.pxUnitAmp)
 
   const days = useMemo(() => {
-    const daysWidth = Number(getDateWidth(translateX + width + moveCalc, translateX));
+    const daysWidth = Number(getDateWidth(translateX + width + moveCalc, translateX))
 
     return `${daysWidth} ${daysWidth > 1 ? locale.days : locale.day}`
   }, [translateX, width, moveCalc, translateX])
 
-  const icon = data.record.icon
   return (
     <div
       role='none'
@@ -215,24 +214,23 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
           reachEdge={reachEdge}
           onBeforeResize={handleBeforeResize('move')}
         >
-          {icon || <>
-            { (renderBar ? (
-              renderBar(data, {
-                width: width + 1,
-                height: barHeight + 1,
-              })
-            ) : (
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                version='1.1'
-                width={width + 1}
-                height={barHeight + 1}
-                viewBox={`0 0 ${width + 1} ${barHeight + 1}`}
-              >
-                <path
-                  fill={record.backgroundColor || (getBarColor && getBarColor(record).backgroundColor) || themeColor[0]}
-                  stroke={record.borderColor || (getBarColor && getBarColor(record).borderColor) || themeColor[1]}
-                  d={`
+          {renderBar ? (
+            renderBar(data, {
+              width: width + 1,
+              height: barHeight + 1,
+            })
+          ) : (
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              version='1.1'
+              width={width + 1}
+              height={barHeight + 1}
+              viewBox={`0 0 ${width + 1} ${barHeight + 1}`}
+            >
+              <path
+                fill={record.backgroundColor || (getBarColor && getBarColor(record).backgroundColor) || themeColor[0]}
+                stroke={record.borderColor || (getBarColor && getBarColor(record).borderColor) || themeColor[1]}
+                d={`
               M${width - 2},0.5
               l-${width - 5},0
               c-0.41421,0 -0.78921,0.16789 -1.06066,0.43934
@@ -253,19 +251,17 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
               c-0.03256,-0.38255 -0.20896,-0.724 -0.47457,-0.97045
               c-0.26763,-0.24834 -0.62607,-0.40013 -1.01995,-0.40013z
             `}
-                />
-              </svg>
-            ))}
-          </>
-          }
+              />
+            </svg>
+          )}
         </DragResize>
       </div>
-      {!icon && (allowDrag || disabled || alwaysShowTaskBar) && (
+      {(allowDrag || disabled || alwaysShowTaskBar) && (
         <div className={`${prefixClsTaskBar}-label`} style={{ left: width / 2 - 10 }}>
           {days}
         </div>
       )}
-      {!icon &&(stepGesture === 'moving' || allowDrag || alwaysShowTaskBar) && (
+      {(stepGesture === 'moving' || allowDrag || alwaysShowTaskBar) && (
         <>
           <div className={`${prefixClsTaskBar}-date-text`} style={{ left: width + 16 }}>
             {renderRightText ? renderRightText(data) : dateTextFormat(translateX + width + moveCalc)}
