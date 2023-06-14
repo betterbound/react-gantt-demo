@@ -5958,21 +5958,18 @@ styleInject(css_248z$e);
 
 var TaskBarItems = function TaskBarItems(_ref) {
   var data = _ref.data,
-      index = _ref.index,
       barItem = _ref.barItem;
 
   var _useContext = useContext(context),
       store = _useContext.store,
       prefixCls = _useContext.prefixCls;
 
-  var loading = data.loading;
+  var loading = data.loading,
+      translateY = data.translateY;
   var prefixClsTaskBar = "".concat(prefixCls, "-task-bar");
-  var baseTop = store.rowHeight;
-  var topStep = store.rowHeight;
   var valid = barItem.startDate && barItem.endDate;
   var startAmp = dayjs(barItem.startDate || 0).startOf('day').valueOf();
   var translateX = valid ? startAmp / store.pxUnitAmp : 0;
-  var translateY = baseTop + index * topStep;
   return /*#__PURE__*/React.createElement("div", {
     role: 'none',
     className: prefixClsTaskBar,
@@ -5981,11 +5978,7 @@ var TaskBarItems = function TaskBarItems(_ref) {
     }
   }, loading && /*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixClsTaskBar, "-loading")
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      transform: "translateY(50%) translateY(-".concat(baseTop, "px)")
-    }
-  }, barItem.icon));
+  }), barItem.icon);
 };
 
 var TaskBarItems$1 = observer(TaskBarItems);
@@ -6002,23 +5995,18 @@ var BarList = function BarList() {
       start = _store$getVisibleRows.start;
   return /*#__PURE__*/React.createElement("div", {
     "data-bar": 'BarList'
-  }, barList.slice(start, start + count).map(function (bar, index) {
+  }, barList.slice(start, start + count).map(function (bar) {
     if (bar._group) return /*#__PURE__*/React.createElement(GroupBar$1, {
       key: bar.key,
       data: bar
     });
-
-    if (bar.record.barItems) {
-      return bar.record.barItems.map(function (barItem) {
-        return /*#__PURE__*/React.createElement(TaskBarItems$1, {
-          key: barItem.id,
-          index: index,
-          data: bar,
-          barItem: barItem
-        });
+    if (bar.record.barItems) return bar.record.barItems.map(function (barItem) {
+      return /*#__PURE__*/React.createElement(TaskBarItems$1, {
+        key: barItem.id,
+        data: bar,
+        barItem: barItem
       });
-    }
-
+    });
     return bar.invalidDateRange ? /*#__PURE__*/React.createElement(InvalidTaskBar$1, {
       key: bar.key,
       data: bar
