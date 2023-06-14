@@ -33,7 +33,7 @@ const TimeAxis: React.FC = () => {
 
   const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     onTimeAxisClick(e.currentTarget.value)
-  }, [])
+  }, [onTimeAxisClick])
 
   return (
     <DragResize
