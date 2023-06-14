@@ -5313,7 +5313,15 @@ var GanttStore = /*#__PURE__*/function () {
         if (_this2.sightConfig.type === 'halfYear') return date.format(format) + (fstHalfYear.has(date.month()) ? _this2.locale.firstHalf : _this2.locale.secondHalf);
 
         if (_this2.sightConfig.type === 'week_in_month') {
-          var weekInMonth = Math.ceil((date.date() - dayjs(date).startOf('month').day() + 1) / 7);
+          // その月の最初の日を取得。
+          var startOfMonth = dayjs(date).startOf('month'); // その月の最初の月曜日を取得。Dayjsのday()メソッドは、日曜日を0として曜日の番号を返すため、1以下ならその日は月曜日または日曜日。
+          // もしその日が月曜日（1）または日曜日（0）であれば、その日が最初の月曜日（日曜日の場合、その次の日が月曜日なので問題ない）。
+          // もしその日が火曜日以降であれば、次の週の月曜日（add(1, 'week').day(1)によって取得）が最初の月曜日。
+
+          var firstMonday = startOfMonth.day() <= 1 ? startOfMonth : startOfMonth.add(1, 'week').day(1); // date.diff(firstMonday, 'day')で対象の日付と最初の月曜日の間の日数を計算。その結果に1を足して7で割り、小数点を切り上げることで週の数を計算。
+          // この計算により、例えば6月1日（木曜日）でも、その週が6月の1週目となる。
+
+          var weekInMonth = Math.ceil((date.diff(firstMonday, 'day') + 1) / 7);
           return "".concat(weekInMonth, "w");
         }
 
@@ -6752,7 +6760,8 @@ styleInject(css_248z$3);
 var TimeAxis = function TimeAxis() {
   var _useContext = useContext(context),
       store = _useContext.store,
-      prefixCls = _useContext.prefixCls;
+      prefixCls = _useContext.prefixCls,
+      onTimeAxisClick = _useContext.onTimeAxisClick;
 
   var prefixClsTimeAxis = "".concat(prefixCls, "-time-axis");
   var sightConfig = store.sightConfig,
@@ -6771,6 +6780,9 @@ var TimeAxis = function TimeAxis() {
     var type = sightConfig.type;
     return type === 'day' && isToday(key);
   }, [sightConfig, isToday]);
+  var handleClick = useCallback(function (e) {
+    if (onTimeAxisClick) onTimeAxisClick(e.currentTarget.value);
+  }, [onTimeAxisClick]);
   return /*#__PURE__*/React.createElement(DragResize$1, {
     onResize: handleResize,
     onResizeEnd: handleLeftResizeEnd,
@@ -6809,7 +6821,9 @@ var TimeAxis = function TimeAxis() {
       style: {
         width: item.width,
         left: item.left
-      }
+      },
+      value: item.key,
+      onClick: handleClick
     }, /*#__PURE__*/React.createElement("span", {
       className: classNames("".concat(prefixClsTimeAxis, "-minor-label"), _defineProperty({}, "".concat(prefixClsTimeAxis, "-today"), getIsToday(item)))
     }, item.label));
