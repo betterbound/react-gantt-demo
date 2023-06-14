@@ -32,6 +32,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
     renderLeftText?: GanttContext<RecordType>['renderLeftText'];
     renderRightText?: GanttContext<RecordType>['renderLeftText'];
     onExpand?: GanttContext<RecordType>['onExpand'];
+    onTimeAxisClick?: GanttContext<RecordType>['onTimeAxisClick'];
     /**
      * 自定义日期筛选维度
      */

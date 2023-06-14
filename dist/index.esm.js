@@ -7072,6 +7072,7 @@ var GanttComponent = function GanttComponent(props) {
       renderLeftText = props.renderLeftText,
       renderRightText = props.renderRightText,
       onExpand = props.onExpand,
+      onTimeAxisClick = props.onTimeAxisClick,
       _props$customSights = props.customSights,
       customSights = _props$customSights === void 0 ? [] : _props$customSights,
       _props$locale = props.locale,
@@ -7137,9 +7138,10 @@ var GanttComponent = function GanttComponent(props) {
       renderLeftText: renderLeftText,
       renderRightText: renderRightText,
       onExpand: onExpand,
+      onTimeAxisClick: onTimeAxisClick,
       hideTable: hideTable
     };
-  }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, onExpand, hideTable]);
+  }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, onExpand, onTimeAxisClick, hideTable]);
   return /*#__PURE__*/React.createElement(context.Provider, {
     value: ContextValue
   }, /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("header", null, !hideTable && /*#__PURE__*/React.createElement(TableHeader$1, null), /*#__PURE__*/React.createElement(TimeAxis$1, null)), /*#__PURE__*/React.createElement("main", {
