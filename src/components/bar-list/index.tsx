@@ -13,14 +13,11 @@ const BarList: React.FC = () => {
   const { count, start } = store.getVisibleRows
   return (
     <div data-bar='BarList'>
-      {barList.slice(start, start + count).map((bar, index) => {
+      {barList.slice(start, start + count).map(bar => {
         if (bar._group) return <GroupBar key={bar.key} data={bar} />
 
-        if (bar.record.barItems) {
-          return bar.record.barItems.map(barItem => (
-            <TaskBarItems key={barItem.id} index={index} data={bar} barItem={barItem} />
-          ))
-        }
+        if (bar.record.barItems)
+          return bar.record.barItems.map(barItem => <TaskBarItems key={barItem.id} data={bar} barItem={barItem} />)
 
         return bar.invalidDateRange ? <InvalidTaskBar key={bar.key} data={bar} /> : <TaskBar key={bar.key} data={bar} />
       })}

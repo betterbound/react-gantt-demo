@@ -13,6 +13,7 @@ interface Data {
     startDate: string
     endDate: string
   }[]
+  children: any
 }
 
 function createData(len: number) {
@@ -23,32 +24,48 @@ function createData(len: number) {
       name: `Title${i}`,
       startDate: dayjs().subtract(-i, 'day').format('YYYY-MM-DD'),
       endDate: dayjs().add(i, 'day').format('YYYY-MM-DD'),
-      barItems: [
+      children: [
         {
-          id: `${i}-1`,
-          icon: <span>A</span>,
-          startDate: dayjs().subtract(-i, 'week').format('YYYY-MM-DD'),
-          endDate: dayjs().add(i, 'week').format('YYYY-MM-DD'),
-        },
-        {
-          id: `${i}-2`,
-          icon: <span>B</span>,
-          startDate: dayjs()
-            .subtract(-i - 1, 'week')
-            .format('YYYY-MM-DD'),
-          endDate: dayjs()
-            .add(i + 1, 'week')
-            .format('YYYY-MM-DD'),
-        },
-        {
-          id: `${i}-3`,
-          icon: <span>C</span>,
-          startDate: dayjs()
-            .subtract(-i - 3, 'week')
-            .format('YYYY-MM-DD'),
-          endDate: dayjs()
-            .add(i + 3, 'week')
-            .format('YYYY-MM-DD'),
+          id: i,
+          name: `Title${i}`,
+          startDate: dayjs().subtract(-i, 'day').format('YYYY-MM-DD'),
+          endDate: dayjs().add(i, 'day').format('YYYY-MM-DD'),
+          children: [
+            {
+              id: i,
+              name: `Title${i}`,
+              startDate: dayjs().subtract(-i, 'day').format('YYYY-MM-DD'),
+              endDate: dayjs().add(i, 'day').format('YYYY-MM-DD'),
+              barItems: [
+                {
+                  id: `${i}-1`,
+                  icon: <span>A</span>,
+                  startDate: dayjs().subtract(-i, 'week').format('YYYY-MM-DD'),
+                  endDate: dayjs().add(i, 'week').format('YYYY-MM-DD'),
+                },
+                {
+                  id: `${i}-2`,
+                  icon: <span>B</span>,
+                  startDate: dayjs()
+                    .subtract(-i - 1, 'week')
+                    .format('YYYY-MM-DD'),
+                  endDate: dayjs()
+                    .add(i + 1, 'week')
+                    .format('YYYY-MM-DD'),
+                },
+                {
+                  id: `${i}-3`,
+                  icon: <span>C</span>,
+                  startDate: dayjs()
+                    .subtract(-i - 3, 'week')
+                    .format('YYYY-MM-DD'),
+                  endDate: dayjs()
+                    .add(i + 3, 'week')
+                    .format('YYYY-MM-DD'),
+                },
+              ],
+            },
+          ],
         },
       ],
     })
@@ -57,7 +74,7 @@ function createData(len: number) {
 }
 
 const App = () => {
-  const [data, setData] = useState(createData(20))
+  const [data, setData] = useState(createData(40))
   console.log('data', data)
   return (
     <div style={{ width: '100%', height: 500 }}>
