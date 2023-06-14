@@ -76,6 +76,9 @@ function createData(len: number) {
 const App = () => {
   const [data, setData] = useState(createData(40))
   console.log('data', data)
+  const handleClick = (value: string) => {
+    console.log(new Date(value))
+  }
   return (
     <div style={{ width: '100%', height: 500 }}>
       <RcGantt<Data>
@@ -104,6 +107,7 @@ const App = () => {
           })
           return true
         }}
+        onTimeAxisClick={handleClick}
       />
     </div>
   )
