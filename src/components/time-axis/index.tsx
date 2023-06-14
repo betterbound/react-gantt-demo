@@ -7,7 +7,7 @@ import Context from '../../context'
 import './index.less'
 
 const TimeAxis: React.FC = () => {
-  const { store, prefixCls } = useContext(Context)
+  const { store, prefixCls, onTimeAxisClick } = useContext(Context)
   const prefixClsTimeAxis = `${prefixCls}-time-axis`
   const { sightConfig, isToday } = store
   const majorList = store.getMajorList()
@@ -30,6 +30,10 @@ const TimeAxis: React.FC = () => {
     },
     [sightConfig, isToday]
   )
+
+  const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if (onTimeAxisClick) onTimeAxisClick(e.currentTarget.value)
+  }, [onTimeAxisClick])
 
   return (
     <DragResize
@@ -65,6 +69,8 @@ const TimeAxis: React.FC = () => {
               type='button'
               className={classNames(`${prefixClsTimeAxis}-minor`)}
               style={{ width: item.width, left: item.left }}
+              value={item.key}
+              onClick={handleClick}
             >
               <span
                 className={classNames(`${prefixClsTimeAxis}-minor-label`, {

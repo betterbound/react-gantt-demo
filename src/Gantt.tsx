@@ -63,6 +63,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   renderLeftText?: GanttContext<RecordType>['renderLeftText']
   renderRightText?: GanttContext<RecordType>['renderLeftText']
   onExpand?: GanttContext<RecordType>['onExpand']
+  onTimeAxisClick?: (value: string) => void
   /**
    * 自定义日期筛选维度
    */
@@ -140,6 +141,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     renderLeftText,
     renderRightText,
     onExpand,
+    onTimeAxisClick,
     customSights = [],
     locale = { ...defaultLocale },
     hideTable = false,
@@ -201,6 +203,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       renderLeftText,
       renderRightText,
       onExpand,
+      onTimeAxisClick,
       hideTable,
     }),
     [
@@ -222,6 +225,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       renderLeftText,
       renderRightText,
       onExpand,
+      onTimeAxisClick,
       hideTable,
     ]
   )
