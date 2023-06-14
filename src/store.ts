@@ -540,7 +540,17 @@ class GanttStore {
       if (this.sightConfig.type === 'halfYear')
         return date.format(format) + (fstHalfYear.has(date.month()) ? this.locale.firstHalf : this.locale.secondHalf)
       if (this.sightConfig.type === 'week_in_month') {
-        const weekInMonth = Math.ceil((date.date() - dayjs(date).startOf('month').day() + 1) / 7)
+        // その月の最初の日を取得。
+        const startOfMonth = dayjs(date).startOf('month')
+
+        // その月の最初の月曜日を取得。Dayjsのday()メソッドは、日曜日を0として曜日の番号を返すため、1以下ならその日は月曜日または日曜日。
+        // もしその日が月曜日（1）または日曜日（0）であれば、その日が最初の月曜日（日曜日の場合、その次の日が月曜日なので問題ない）。
+        // もしその日が火曜日以降であれば、次の週の月曜日（add(1, 'week').day(1)によって取得）が最初の月曜日。
+        const firstMonday = startOfMonth.day() <= 1 ? startOfMonth : startOfMonth.add(1, 'week').day(1)
+        // date.diff(firstMonday, 'day')で対象の日付と最初の月曜日の間の日数を計算。その結果に1を足して7で割り、小数点を切り上げることで週の数を計算。
+        // この計算により、例えば6月1日（木曜日）でも、その週が6月の1週目となる。
+        const weekInMonth = Math.ceil((date.diff(firstMonday, 'day') + 1) / 7)
+
         return `${weekInMonth}w`
       }
       return date.format(format)
