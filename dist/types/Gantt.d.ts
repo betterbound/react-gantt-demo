@@ -32,7 +32,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
     renderLeftText?: GanttContext<RecordType>['renderLeftText'];
     renderRightText?: GanttContext<RecordType>['renderLeftText'];
     onExpand?: GanttContext<RecordType>['onExpand'];
-    onTimeAxisClick?: (value: string) => void;
+    onTimeAxisClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     /**
      * 自定义日期筛选维度
      */

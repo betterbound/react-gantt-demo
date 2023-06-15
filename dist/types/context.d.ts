@@ -37,7 +37,7 @@ export interface GanttContext<RecordType = DefaultRecordType> {
     renderLeftText?: (barInfo: Gantt.Bar<RecordType>) => React.ReactNode;
     renderRightText?: (barInfo: Gantt.Bar<RecordType>) => React.ReactNode;
     onExpand?: (record: Gantt.Record<RecordType>, collapsed: boolean) => void;
-    onTimeAxisClick?: (value: string) => void;
+    onTimeAxisClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     hideTable?: boolean;
 }
 declare const context: React.Context<GanttContext<DefaultRecordType>>;

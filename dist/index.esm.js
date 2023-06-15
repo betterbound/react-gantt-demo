@@ -6781,7 +6781,7 @@ var TimeAxis = function TimeAxis() {
     return type === 'day' && isToday(key);
   }, [sightConfig, isToday]);
   var handleClick = useCallback(function (e) {
-    if (onTimeAxisClick) onTimeAxisClick(e.currentTarget.value);
+    if (onTimeAxisClick) onTimeAxisClick(e);
   }, [onTimeAxisClick]);
   return /*#__PURE__*/React.createElement(DragResize$1, {
     onResize: handleResize,
