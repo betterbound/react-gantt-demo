@@ -76,8 +76,8 @@ function createData(len: number) {
 const App = () => {
   const [data, setData] = useState(createData(40))
   console.log('data', data)
-  const handleClick = (value: string) => {
-    console.log(new Date(value))
+  const handleClick = (e) => {
+    console.log(e, e.currentTarget.value, e.currentTarget.innerText)
   }
   return (
     <div style={{ width: '100%', height: 500 }}>
