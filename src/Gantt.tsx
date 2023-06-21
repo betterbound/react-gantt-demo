@@ -62,6 +62,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   alwaysShowTaskBar?: boolean
   renderLeftText?: GanttContext<RecordType>['renderLeftText']
   renderRightText?: GanttContext<RecordType>['renderLeftText']
+  renderDaysText?: GanttContext<RecordType>['renderDaysText']
   onExpand?: GanttContext<RecordType>['onExpand']
   onTimeAxisClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   /**
@@ -140,6 +141,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     alwaysShowTaskBar = true,
     renderLeftText,
     renderRightText,
+    renderDaysText,
     onExpand,
     onTimeAxisClick,
     customSights = [],
@@ -202,6 +204,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       alwaysShowTaskBar,
       renderLeftText,
       renderRightText,
+      renderDaysText,
       onExpand,
       onTimeAxisClick,
       hideTable,
@@ -224,6 +227,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       alwaysShowTaskBar,
       renderLeftText,
       renderRightText,
+      renderDaysText,
       onExpand,
       onTimeAxisClick,
       hideTable,

@@ -38,6 +38,7 @@ export interface GanttContext<RecordType = DefaultRecordType> {
   alwaysShowTaskBar?: boolean
   renderLeftText?: (barInfo: Gantt.Bar<RecordType>) => React.ReactNode
   renderRightText?: (barInfo: Gantt.Bar<RecordType>) => React.ReactNode
+  renderDaysText?: (barInfo: Gantt.Bar<RecordType>) => React.ReactNode
   onExpand?: (record: Gantt.Record<RecordType>, collapsed: boolean) => void
   onTimeAxisClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 

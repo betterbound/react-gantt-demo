@@ -25,6 +25,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
     alwaysShowTaskBar,
     renderLeftText,
     renderRightText,
+    renderDaysText,
   } = useContext(Context)
   const {
     width,
@@ -258,7 +259,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
       </div>
       {(allowDrag || disabled || alwaysShowTaskBar) && (
         <div className={`${prefixClsTaskBar}-label`} style={{ left: width / 2 - 10 }}>
-          {days}
+          {renderDaysText ? renderDaysText(data) : days}
         </div>
       )}
       {(stepGesture === 'moving' || allowDrag || alwaysShowTaskBar) && (

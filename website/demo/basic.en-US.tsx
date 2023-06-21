@@ -108,6 +108,7 @@ const App = () => {
           return true
         }}
         onTimeAxisClick={handleClick}
+        renderDaysText={() => ''}
       />
     </div>
   )
