@@ -65,6 +65,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   renderDaysText?: GanttContext<RecordType>['renderDaysText']
   onExpand?: GanttContext<RecordType>['onExpand']
   onTimeAxisClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  showIndicator?: boolean
   /**
    * 自定义日期筛选维度
    */
@@ -144,6 +145,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     renderDaysText,
     onExpand,
     onTimeAxisClick,
+    showIndicator = true,
     customSights = [],
     locale = { ...defaultLocale },
     hideTable = false,
@@ -207,6 +209,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       renderDaysText,
       onExpand,
       onTimeAxisClick,
+      showIndicator,
       hideTable,
     }),
     [
@@ -230,6 +233,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       renderDaysText,
       onExpand,
       onTimeAxisClick,
+      showIndicator,
       hideTable,
     ]
   )

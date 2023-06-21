@@ -109,6 +109,7 @@ const App = () => {
         }}
         onTimeAxisClick={handleClick}
         renderDaysText={() => ''}
+        showIndicator={false}
       />
     </div>
   )
