@@ -42,6 +42,7 @@ export interface GanttContext<RecordType = DefaultRecordType> {
   onExpand?: (record: Gantt.Record<RecordType>, collapsed: boolean) => void
   onTimeAxisClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   showChangeBarSize?: boolean
+  canMoveBar?: boolean
 
   hideTable?: boolean
 }
