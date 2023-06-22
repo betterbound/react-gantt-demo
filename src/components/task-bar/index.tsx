@@ -26,7 +26,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
     renderLeftText,
     renderRightText,
     renderDaysText,
-    showIndicator
+    showChangeBarSize
   } = useContext(Context)
   const {
     width,
@@ -47,7 +47,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
   const { selectionIndicatorTop, showSelectionIndicator, rowHeight, locale } = store
 
   const showDragBar = useMemo(() => {
-    if (!showIndicator || !showSelectionIndicator) return false
+    if (!showChangeBarSize || !showSelectionIndicator) return false
     // 差值
     const baseTop = TOP_PADDING + rowHeight / 2 - barHeight / 2
     return selectionIndicatorTop === translateY - baseTop

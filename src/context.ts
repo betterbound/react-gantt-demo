@@ -41,7 +41,7 @@ export interface GanttContext<RecordType = DefaultRecordType> {
   renderDaysText?: (barInfo: Gantt.Bar<RecordType>) => React.ReactNode
   onExpand?: (record: Gantt.Record<RecordType>, collapsed: boolean) => void
   onTimeAxisClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
-  showIndicator?: boolean
+  showChangeBarSize?: boolean
 
   hideTable?: boolean
 }
