@@ -62,8 +62,10 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   alwaysShowTaskBar?: boolean
   renderLeftText?: GanttContext<RecordType>['renderLeftText']
   renderRightText?: GanttContext<RecordType>['renderLeftText']
+  renderDaysText?: GanttContext<RecordType>['renderDaysText']
   onExpand?: GanttContext<RecordType>['onExpand']
   onTimeAxisClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  showChangeBarSize?: boolean
   /**
    * 自定义日期筛选维度
    */
@@ -140,8 +142,10 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     alwaysShowTaskBar = true,
     renderLeftText,
     renderRightText,
+    renderDaysText,
     onExpand,
     onTimeAxisClick,
+    showChangeBarSize = true,
     customSights = [],
     locale = { ...defaultLocale },
     hideTable = false,
@@ -202,8 +206,10 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       alwaysShowTaskBar,
       renderLeftText,
       renderRightText,
+      renderDaysText,
       onExpand,
       onTimeAxisClick,
+      showChangeBarSize,
       hideTable,
     }),
     [
@@ -224,8 +230,10 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       alwaysShowTaskBar,
       renderLeftText,
       renderRightText,
+      renderDaysText,
       onExpand,
       onTimeAxisClick,
+      showChangeBarSize,
       hideTable,
     ]
   )

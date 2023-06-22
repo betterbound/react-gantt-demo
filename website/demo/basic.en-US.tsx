@@ -108,6 +108,8 @@ const App = () => {
           return true
         }}
         onTimeAxisClick={handleClick}
+        renderDaysText={() => ''}
+        showChangeBarSize={false}
       />
     </div>
   )

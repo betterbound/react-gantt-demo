@@ -25,6 +25,8 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
     alwaysShowTaskBar,
     renderLeftText,
     renderRightText,
+    renderDaysText,
+    showChangeBarSize
   } = useContext(Context)
   const {
     width,
@@ -45,7 +47,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
   const { selectionIndicatorTop, showSelectionIndicator, rowHeight, locale } = store
 
   const showDragBar = useMemo(() => {
-    if (!showSelectionIndicator) return false
+    if (!showChangeBarSize || !showSelectionIndicator) return false
     // 差值
     const baseTop = TOP_PADDING + rowHeight / 2 - barHeight / 2
     return selectionIndicatorTop === translateY - baseTop
@@ -258,7 +260,7 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
       </div>
       {(allowDrag || disabled || alwaysShowTaskBar) && (
         <div className={`${prefixClsTaskBar}-label`} style={{ left: width / 2 - 10 }}>
-          {days}
+          {renderDaysText ? renderDaysText(data) : days}
         </div>
       )}
       {(stepGesture === 'moving' || allowDrag || alwaysShowTaskBar) && (
