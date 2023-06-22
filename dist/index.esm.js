@@ -5780,7 +5780,9 @@ var TaskBar = function TaskBar(_ref) {
       barHeight = _useContext.barHeight,
       alwaysShowTaskBar = _useContext.alwaysShowTaskBar,
       renderLeftText = _useContext.renderLeftText,
-      renderRightText = _useContext.renderRightText;
+      renderRightText = _useContext.renderRightText,
+      renderDaysText = _useContext.renderDaysText,
+      showChangeBarSize = _useContext.showChangeBarSize;
 
   var width = data.width,
       translateX = data.translateX,
@@ -5802,7 +5804,7 @@ var TaskBar = function TaskBar(_ref) {
       rowHeight = store.rowHeight,
       locale = store.locale;
   var showDragBar = useMemo(function () {
-    if (!showSelectionIndicator) return false; // 差值
+    if (!showChangeBarSize || !showSelectionIndicator) return false; // 差值
 
     var baseTop = TOP_PADDING + rowHeight / 2 - barHeight / 2;
     return selectionIndicatorTop === translateY - baseTop;
@@ -5946,7 +5948,7 @@ var TaskBar = function TaskBar(_ref) {
     style: {
       left: width / 2 - 10
     }
-  }, days), (stepGesture === 'moving' || allowDrag || alwaysShowTaskBar) && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  }, renderDaysText ? renderDaysText(data) : days), (stepGesture === 'moving' || allowDrag || alwaysShowTaskBar) && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixClsTaskBar, "-date-text"),
     style: {
       left: width + 16
@@ -7085,8 +7087,11 @@ var GanttComponent = function GanttComponent(props) {
       alwaysShowTaskBar = _props$alwaysShowTask === void 0 ? true : _props$alwaysShowTask,
       renderLeftText = props.renderLeftText,
       renderRightText = props.renderRightText,
+      renderDaysText = props.renderDaysText,
       onExpand = props.onExpand,
       onTimeAxisClick = props.onTimeAxisClick,
+      _props$showChangeBarS = props.showChangeBarSize,
+      showChangeBarSize = _props$showChangeBarS === void 0 ? true : _props$showChangeBarS,
       _props$customSights = props.customSights,
       customSights = _props$customSights === void 0 ? [] : _props$customSights,
       _props$locale = props.locale,
@@ -7151,11 +7156,13 @@ var GanttComponent = function GanttComponent(props) {
       alwaysShowTaskBar: alwaysShowTaskBar,
       renderLeftText: renderLeftText,
       renderRightText: renderRightText,
+      renderDaysText: renderDaysText,
       onExpand: onExpand,
       onTimeAxisClick: onTimeAxisClick,
+      showChangeBarSize: showChangeBarSize,
       hideTable: hideTable
     };
-  }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, onExpand, onTimeAxisClick, hideTable]);
+  }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, renderDaysText, onExpand, onTimeAxisClick, showChangeBarSize, hideTable]);
   return /*#__PURE__*/React.createElement(context.Provider, {
     value: ContextValue
   }, /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("header", null, !hideTable && /*#__PURE__*/React.createElement(TableHeader$1, null), /*#__PURE__*/React.createElement(TimeAxis$1, null)), /*#__PURE__*/React.createElement("main", {

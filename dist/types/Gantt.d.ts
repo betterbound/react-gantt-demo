@@ -31,8 +31,10 @@ export interface GanttProps<RecordType = DefaultRecordType> {
     alwaysShowTaskBar?: boolean;
     renderLeftText?: GanttContext<RecordType>['renderLeftText'];
     renderRightText?: GanttContext<RecordType>['renderLeftText'];
+    renderDaysText?: GanttContext<RecordType>['renderDaysText'];
     onExpand?: GanttContext<RecordType>['onExpand'];
     onTimeAxisClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    showChangeBarSize?: boolean;
     /**
      * 自定义日期筛选维度
      */
