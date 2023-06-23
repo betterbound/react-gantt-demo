@@ -14,11 +14,77 @@ interface TaskBarProps {
   data: Gantt.Bar
 }
 
-const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
+interface RenderBarProps {
+  data: Gantt.Bar
+}
+
+const RenderBar: React.FC<RenderBarProps> = ({ data }) => {
   const {
     store,
     getBarColor,
     renderBar,
+    barHeight,
+  } = useContext(Context)
+  const {
+    width,
+    translateX,
+    record,
+  } = data 
+
+  const themeColor = useMemo(() => {
+    if (translateX + width >= dayjs().valueOf() / store.pxUnitAmp) return ['#95DDFF', '#64C7FE']
+    return ['#FD998F', '#F96B5D']
+  }, [store.pxUnitAmp, translateX, width])
+
+  return (
+    <>
+      {renderBar ? (
+        renderBar(data, {
+          width: width + 1,
+          height: barHeight + 1,
+        })
+      ) : (
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          version='1.1'
+          width={width + 1}
+          height={barHeight + 1}
+          viewBox={`0 0 ${width + 1} ${barHeight + 1}`}
+        >
+          <path
+            fill={record.backgroundColor || (getBarColor && getBarColor(record).backgroundColor) || themeColor[0]}
+            stroke={record.borderColor || (getBarColor && getBarColor(record).borderColor) || themeColor[1]}
+            d={`
+          M${width - 2},0.5
+          l-${width - 5},0
+          c-0.41421,0 -0.78921,0.16789 -1.06066,0.43934
+          c-0.27145,0.27145 -0.43934,0.64645 -0.43934,1.06066
+          l0,5.3
+
+          c0.03256,0.38255 0.20896,0.724 0.47457,0.97045
+          c0.26763,0.24834 0.62607,0.40013 1.01995,0.40013
+          l4,0
+
+          l${width - 12},0
+
+          l4,0
+          c0.41421,0 0.78921,-0.16789 1.06066,-0.43934
+          c0.27145,-0.27145 0.43934,-0.64645 0.43934,-1.06066
+
+          l0,-5.3
+          c-0.03256,-0.38255 -0.20896,-0.724 -0.47457,-0.97045
+          c-0.26763,-0.24834 -0.62607,-0.40013 -1.01995,-0.40013z
+        `}
+          />
+        </svg>
+      )}
+    </>
+  )
+}
+
+const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
+  const {
+    store,
     onBarClick,
     prefixCls,
     barHeight,
@@ -26,7 +92,8 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
     renderLeftText,
     renderRightText,
     renderDaysText,
-    showChangeBarSize
+    showChangeBarSize,
+    canMoveBar,
   } = useContext(Context)
   const {
     width,
@@ -52,11 +119,6 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
     const baseTop = TOP_PADDING + rowHeight / 2 - barHeight / 2
     return selectionIndicatorTop === translateY - baseTop
   }, [showSelectionIndicator, selectionIndicatorTop, translateY, rowHeight, barHeight])
-
-  const themeColor = useMemo(() => {
-    if (translateX + width >= dayjs().valueOf() / store.pxUnitAmp) return ['#95DDFF', '#64C7FE']
-    return ['#FD998F', '#F96B5D']
-  }, [store.pxUnitAmp, translateX, width])
 
   const handleBeforeResize = (type: Gantt.MoveType) => () => {
     if (disabled) return
@@ -200,63 +262,28 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
             />
           </>
         )}
-        <DragResize
-          className={`${prefixClsTaskBar}-bar`}
-          onResize={handleResize}
-          onResizeEnd={handleMoveEnd}
-          defaultSize={{
-            x: translateX,
-            width,
-          }}
-          minWidth={30}
-          grid={grid}
-          type='move'
-          scroller={store.chartElementRef.current || undefined}
-          onAutoScroll={handleAutoScroll}
-          reachEdge={reachEdge}
-          onBeforeResize={handleBeforeResize('move')}
-        >
-          {renderBar ? (
-            renderBar(data, {
-              width: width + 1,
-              height: barHeight + 1,
-            })
-          ) : (
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              version='1.1'
-              width={width + 1}
-              height={barHeight + 1}
-              viewBox={`0 0 ${width + 1} ${barHeight + 1}`}
-            >
-              <path
-                fill={record.backgroundColor || (getBarColor && getBarColor(record).backgroundColor) || themeColor[0]}
-                stroke={record.borderColor || (getBarColor && getBarColor(record).borderColor) || themeColor[1]}
-                d={`
-              M${width - 2},0.5
-              l-${width - 5},0
-              c-0.41421,0 -0.78921,0.16789 -1.06066,0.43934
-              c-0.27145,0.27145 -0.43934,0.64645 -0.43934,1.06066
-              l0,5.3
-
-              c0.03256,0.38255 0.20896,0.724 0.47457,0.97045
-              c0.26763,0.24834 0.62607,0.40013 1.01995,0.40013
-              l4,0
-
-              l${width - 12},0
-
-              l4,0
-              c0.41421,0 0.78921,-0.16789 1.06066,-0.43934
-              c0.27145,-0.27145 0.43934,-0.64645 0.43934,-1.06066
-
-              l0,-5.3
-              c-0.03256,-0.38255 -0.20896,-0.724 -0.47457,-0.97045
-              c-0.26763,-0.24834 -0.62607,-0.40013 -1.01995,-0.40013z
-            `}
-              />
-            </svg>
-          )}
-        </DragResize>
+        {canMoveBar ? (
+          <DragResize
+            className={`${prefixClsTaskBar}-bar`}
+            onResize={handleResize}
+            onResizeEnd={handleMoveEnd}
+            defaultSize={{
+              x: translateX,
+              width,
+            }}
+            minWidth={30}
+            grid={grid}
+            type='move'
+            scroller={store.chartElementRef.current || undefined}
+            onAutoScroll={handleAutoScroll}
+            reachEdge={reachEdge}
+            onBeforeResize={handleBeforeResize('move')}
+          >
+            <RenderBar data={data} />
+          </DragResize>
+        ) : (
+          <RenderBar data={data} />
+        )}
       </div>
       {(allowDrag || disabled || alwaysShowTaskBar) && (
         <div className={`${prefixClsTaskBar}-label`} style={{ left: width / 2 - 10 }}>
