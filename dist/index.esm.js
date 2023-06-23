@@ -5766,23 +5766,54 @@ __decorate([action], GanttStore.prototype, "updateTaskDate", null);
 var css_248z$f = ".gantt-task-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-task-bar-loading {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  cursor: not-allowed;\n  z-index: 9;\n}\n.gantt-task-bar-bar {\n  position: relative;\n  height: 8px;\n  line-height: 8px;\n  border-radius: 4px;\n  top: -1px;\n  cursor: pointer;\n}\n.gantt-task-bar-invalid-date-range {\n  display: none;\n}\n.gantt-task-bar-resize-bg {\n  position: absolute;\n  left: 0;\n  top: -5px;\n  border-radius: 4px;\n  box-shadow: 0 2px 4px 0 #f7f7f7;\n  border: 1px solid #f0f0f0;\n  background-color: #fff;\n}\n.gantt-task-bar-resize-bg-compact {\n  height: 17px;\n}\n.gantt-task-bar-resize-handle {\n  position: absolute;\n  left: 0;\n  top: -4px;\n  width: 14px;\n  height: 16px;\n  z-index: 3;\n  background: white;\n}\n.gantt-task-bar-resize-handle:after,\n.gantt-task-bar-resize-handle:before {\n  position: absolute;\n  top: 4px;\n  bottom: 16px;\n  width: 2px;\n  height: 8px;\n  border-radius: 2px;\n  background-color: #d9d9d9;\n  content: '';\n}\n.gantt-task-bar-resize-handle-disabled {\n  cursor: not-allowed !important;\n}\n.gantt-task-bar-resize-handle-left {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-left:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-left:after {\n  right: 4px;\n}\n.gantt-task-bar-resize-handle-right {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-right:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-right:after {\n  right: 4px;\n}\n.gantt-task-bar-date-text {\n  color: #262626;\n}\n.gantt-task-bar-date-text,\n.gantt-task-bar-label {\n  position: absolute;\n  white-space: nowrap;\n  font-size: 12px;\n  top: -6px;\n}\n.gantt-task-bar-label {\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  height: 16px;\n  cursor: pointer;\n  top: -14px;\n}\n";
 styleInject(css_248z$f);
 
-var TaskBar = function TaskBar(_ref) {
-  var _classNames;
-
+var RenderBar = function RenderBar(_ref) {
   var data = _ref.data;
 
   var _useContext = useContext(context),
       store = _useContext.store,
       getBarColor = _useContext.getBarColor,
       renderBar = _useContext.renderBar,
-      onBarClick = _useContext.onBarClick,
-      prefixCls = _useContext.prefixCls,
-      barHeight = _useContext.barHeight,
-      alwaysShowTaskBar = _useContext.alwaysShowTaskBar,
-      renderLeftText = _useContext.renderLeftText,
-      renderRightText = _useContext.renderRightText,
-      renderDaysText = _useContext.renderDaysText,
-      showChangeBarSize = _useContext.showChangeBarSize;
+      barHeight = _useContext.barHeight;
+
+  var width = data.width,
+      translateX = data.translateX,
+      record = data.record;
+  var themeColor = useMemo(function () {
+    if (translateX + width >= dayjs().valueOf() / store.pxUnitAmp) return ['#95DDFF', '#64C7FE'];
+    return ['#FD998F', '#F96B5D'];
+  }, [store.pxUnitAmp, translateX, width]);
+  return /*#__PURE__*/React.createElement(React.Fragment, null, renderBar ? renderBar(data, {
+    width: width + 1,
+    height: barHeight + 1
+  }) : /*#__PURE__*/React.createElement("svg", {
+    xmlns: 'http://www.w3.org/2000/svg',
+    version: '1.1',
+    width: width + 1,
+    height: barHeight + 1,
+    viewBox: "0 0 ".concat(width + 1, " ").concat(barHeight + 1)
+  }, /*#__PURE__*/React.createElement("path", {
+    fill: record.backgroundColor || getBarColor && getBarColor(record).backgroundColor || themeColor[0],
+    stroke: record.borderColor || getBarColor && getBarColor(record).borderColor || themeColor[1],
+    d: "\n          M".concat(width - 2, ",0.5\n          l-").concat(width - 5, ",0\n          c-0.41421,0 -0.78921,0.16789 -1.06066,0.43934\n          c-0.27145,0.27145 -0.43934,0.64645 -0.43934,1.06066\n          l0,5.3\n\n          c0.03256,0.38255 0.20896,0.724 0.47457,0.97045\n          c0.26763,0.24834 0.62607,0.40013 1.01995,0.40013\n          l4,0\n\n          l").concat(width - 12, ",0\n\n          l4,0\n          c0.41421,0 0.78921,-0.16789 1.06066,-0.43934\n          c0.27145,-0.27145 0.43934,-0.64645 0.43934,-1.06066\n\n          l0,-5.3\n          c-0.03256,-0.38255 -0.20896,-0.724 -0.47457,-0.97045\n          c-0.26763,-0.24834 -0.62607,-0.40013 -1.01995,-0.40013z\n        ")
+  })));
+};
+
+var TaskBar = function TaskBar(_ref2) {
+  var _classNames;
+
+  var data = _ref2.data;
+
+  var _useContext2 = useContext(context),
+      store = _useContext2.store,
+      onBarClick = _useContext2.onBarClick,
+      prefixCls = _useContext2.prefixCls,
+      barHeight = _useContext2.barHeight,
+      alwaysShowTaskBar = _useContext2.alwaysShowTaskBar,
+      renderLeftText = _useContext2.renderLeftText,
+      renderRightText = _useContext2.renderRightText,
+      renderDaysText = _useContext2.renderDaysText,
+      showChangeBarSize = _useContext2.showChangeBarSize,
+      canMoveBar = _useContext2.canMoveBar;
 
   var width = data.width,
       translateX = data.translateX,
@@ -5794,9 +5825,9 @@ var TaskBar = function TaskBar(_ref) {
       loading = data.loading,
       getDateWidth = data.getDateWidth;
 
-  var _ref2 = record || {},
-      _ref2$disabled = _ref2.disabled,
-      disabled = _ref2$disabled === void 0 ? false : _ref2$disabled;
+  var _ref3 = record || {},
+      _ref3$disabled = _ref3.disabled,
+      disabled = _ref3$disabled === void 0 ? false : _ref3$disabled;
 
   var prefixClsTaskBar = "".concat(prefixCls, "-task-bar");
   var selectionIndicatorTop = store.selectionIndicatorTop,
@@ -5809,10 +5840,6 @@ var TaskBar = function TaskBar(_ref) {
     var baseTop = TOP_PADDING + rowHeight / 2 - barHeight / 2;
     return selectionIndicatorTop === translateY - baseTop;
   }, [showSelectionIndicator, selectionIndicatorTop, translateY, rowHeight, barHeight]);
-  var themeColor = useMemo(function () {
-    if (translateX + width >= dayjs().valueOf() / store.pxUnitAmp) return ['#95DDFF', '#64C7FE'];
-    return ['#FD998F', '#F96B5D'];
-  }, [store.pxUnitAmp, translateX, width]);
 
   var handleBeforeResize = function handleBeforeResize(type) {
     return function () {
@@ -5821,9 +5848,9 @@ var TaskBar = function TaskBar(_ref) {
     };
   };
 
-  var handleResize = useCallback(function (_ref3) {
-    var newWidth = _ref3.width,
-        x = _ref3.x;
+  var handleResize = useCallback(function (_ref4) {
+    var newWidth = _ref4.width,
+        x = _ref4.x;
     if (disabled) return;
     store.updateBarSize(data, {
       width: newWidth,
@@ -5915,7 +5942,7 @@ var TaskBar = function TaskBar(_ref) {
       width: width + 30,
       left: -14
     }
-  })), /*#__PURE__*/React.createElement(DragResize$1, {
+  })), canMoveBar ? /*#__PURE__*/React.createElement(DragResize$1, {
     className: "".concat(prefixClsTaskBar, "-bar"),
     onResize: handleResize,
     onResizeEnd: handleMoveEnd,
@@ -5930,20 +5957,11 @@ var TaskBar = function TaskBar(_ref) {
     onAutoScroll: handleAutoScroll,
     reachEdge: reachEdge,
     onBeforeResize: handleBeforeResize('move')
-  }, renderBar ? renderBar(data, {
-    width: width + 1,
-    height: barHeight + 1
-  }) : /*#__PURE__*/React.createElement("svg", {
-    xmlns: 'http://www.w3.org/2000/svg',
-    version: '1.1',
-    width: width + 1,
-    height: barHeight + 1,
-    viewBox: "0 0 ".concat(width + 1, " ").concat(barHeight + 1)
-  }, /*#__PURE__*/React.createElement("path", {
-    fill: record.backgroundColor || getBarColor && getBarColor(record).backgroundColor || themeColor[0],
-    stroke: record.borderColor || getBarColor && getBarColor(record).borderColor || themeColor[1],
-    d: "\n              M".concat(width - 2, ",0.5\n              l-").concat(width - 5, ",0\n              c-0.41421,0 -0.78921,0.16789 -1.06066,0.43934\n              c-0.27145,0.27145 -0.43934,0.64645 -0.43934,1.06066\n              l0,5.3\n\n              c0.03256,0.38255 0.20896,0.724 0.47457,0.97045\n              c0.26763,0.24834 0.62607,0.40013 1.01995,0.40013\n              l4,0\n\n              l").concat(width - 12, ",0\n\n              l4,0\n              c0.41421,0 0.78921,-0.16789 1.06066,-0.43934\n              c0.27145,-0.27145 0.43934,-0.64645 0.43934,-1.06066\n\n              l0,-5.3\n              c-0.03256,-0.38255 -0.20896,-0.724 -0.47457,-0.97045\n              c-0.26763,-0.24834 -0.62607,-0.40013 -1.01995,-0.40013z\n            ")
-  })))), (allowDrag || disabled || alwaysShowTaskBar) && /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement(RenderBar, {
+    data: data
+  })) : /*#__PURE__*/React.createElement(RenderBar, {
+    data: data
+  })), (allowDrag || disabled || alwaysShowTaskBar) && /*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixClsTaskBar, "-label"),
     style: {
       left: width / 2 - 10
@@ -7092,6 +7110,8 @@ var GanttComponent = function GanttComponent(props) {
       onTimeAxisClick = props.onTimeAxisClick,
       _props$showChangeBarS = props.showChangeBarSize,
       showChangeBarSize = _props$showChangeBarS === void 0 ? true : _props$showChangeBarS,
+      _props$canMoveBar = props.canMoveBar,
+      canMoveBar = _props$canMoveBar === void 0 ? true : _props$canMoveBar,
       _props$customSights = props.customSights,
       customSights = _props$customSights === void 0 ? [] : _props$customSights,
       _props$locale = props.locale,
@@ -7160,9 +7180,10 @@ var GanttComponent = function GanttComponent(props) {
       onExpand: onExpand,
       onTimeAxisClick: onTimeAxisClick,
       showChangeBarSize: showChangeBarSize,
+      canMoveBar: canMoveBar,
       hideTable: hideTable
     };
-  }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, renderDaysText, onExpand, onTimeAxisClick, showChangeBarSize, hideTable]);
+  }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, renderDaysText, onExpand, onTimeAxisClick, showChangeBarSize, canMoveBar, hideTable]);
   return /*#__PURE__*/React.createElement(context.Provider, {
     value: ContextValue
   }, /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("header", null, !hideTable && /*#__PURE__*/React.createElement(TableHeader$1, null), /*#__PURE__*/React.createElement(TimeAxis$1, null)), /*#__PURE__*/React.createElement("main", {
