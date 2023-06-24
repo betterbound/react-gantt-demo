@@ -6618,7 +6618,7 @@ var TableRows = function TableRows() {
           minWidth: column.minWidth,
           maxWidth: column.maxWidth,
           textAlign: column.align ? column.align : 'left',
-          paddingLeft: index === 0 ? tableIndent * (bar._depth + 1) + 10 : 0
+          paddingLeft: index === 0 && tableIndent * (bar._depth + 1) + 10
         }, column.style)
       }, index === 0 && // eslint-disable-next-line unicorn/no-new-array
       new Array(bar._depth).fill(0).map(function (_, i) {
