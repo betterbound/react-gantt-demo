@@ -59,7 +59,7 @@ const TableRows = () => {
                   minWidth: column.minWidth,
                   maxWidth: column.maxWidth,
                   textAlign: column.align ? column.align : 'left',
-                  paddingLeft: index === 0 ? tableIndent * (bar._depth + 1) + 10 : 12,
+                  paddingLeft: index === 0 ? tableIndent * (bar._depth + 1) + 10 : 0,
                   ...column.style,
                 }}
               >
