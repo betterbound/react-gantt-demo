@@ -6781,7 +6781,8 @@ var TimeAxis = function TimeAxis() {
   var _useContext = useContext(context),
       store = _useContext.store,
       prefixCls = _useContext.prefixCls,
-      onTimeAxisClick = _useContext.onTimeAxisClick;
+      onTimeAxisClick = _useContext.onTimeAxisClick,
+      timeAxisMinorStyle = _useContext.timeAxisMinorStyle;
 
   var prefixClsTimeAxis = "".concat(prefixCls, "-time-axis");
   var sightConfig = store.sightConfig,
@@ -6838,10 +6839,10 @@ var TimeAxis = function TimeAxis() {
       key: item.key,
       type: 'button',
       className: classNames("".concat(prefixClsTimeAxis, "-minor")),
-      style: {
+      style: _objectSpread2({
         width: item.width,
         left: item.left
-      },
+      }, timeAxisMinorStyle),
       value: item.key,
       onClick: handleClick
     }, /*#__PURE__*/React.createElement("span", {
@@ -7112,6 +7113,7 @@ var GanttComponent = function GanttComponent(props) {
       showChangeBarSize = _props$showChangeBarS === void 0 ? true : _props$showChangeBarS,
       _props$canMoveBar = props.canMoveBar,
       canMoveBar = _props$canMoveBar === void 0 ? true : _props$canMoveBar,
+      timeAxisMinorStyle = props.timeAxisMinorStyle,
       _props$customSights = props.customSights,
       customSights = _props$customSights === void 0 ? [] : _props$customSights,
       _props$locale = props.locale,
@@ -7181,9 +7183,10 @@ var GanttComponent = function GanttComponent(props) {
       onTimeAxisClick: onTimeAxisClick,
       showChangeBarSize: showChangeBarSize,
       canMoveBar: canMoveBar,
+      timeAxisMinorStyle: timeAxisMinorStyle,
       hideTable: hideTable
     };
-  }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, renderDaysText, onExpand, onTimeAxisClick, showChangeBarSize, canMoveBar, hideTable]);
+  }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, renderDaysText, onExpand, onTimeAxisClick, showChangeBarSize, canMoveBar, timeAxisMinorStyle, hideTable]);
   return /*#__PURE__*/React.createElement(context.Provider, {
     value: ContextValue
   }, /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("header", null, !hideTable && /*#__PURE__*/React.createElement(TableHeader$1, null), /*#__PURE__*/React.createElement(TimeAxis$1, null)), /*#__PURE__*/React.createElement("main", {

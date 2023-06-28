@@ -36,6 +36,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
     onTimeAxisClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     showChangeBarSize?: boolean;
     canMoveBar?: boolean;
+    timeAxisMinorStyle?: {};
     /**
      * 自定义日期筛选维度
      */

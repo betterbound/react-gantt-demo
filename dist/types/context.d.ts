@@ -41,6 +41,7 @@ export interface GanttContext<RecordType = DefaultRecordType> {
     onTimeAxisClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     showChangeBarSize?: boolean;
     canMoveBar?: boolean;
+    timeAxisMinorStyle?: {};
     hideTable?: boolean;
 }
 declare const context: React.Context<GanttContext<DefaultRecordType>>;
