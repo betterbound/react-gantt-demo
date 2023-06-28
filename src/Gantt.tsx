@@ -67,6 +67,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   onTimeAxisClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   showChangeBarSize?: boolean
   canMoveBar?: boolean
+  timeAxisMinorStyle?: {}
   /**
    * 自定义日期筛选维度
    */
@@ -148,6 +149,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     onTimeAxisClick,
     showChangeBarSize = true,
     canMoveBar = true,
+    timeAxisMinorStyle,
     customSights = [],
     locale = { ...defaultLocale },
     hideTable = false,
@@ -213,6 +215,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       onTimeAxisClick,
       showChangeBarSize,
       canMoveBar,
+      timeAxisMinorStyle,
       hideTable,
     }),
     [
@@ -238,6 +241,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       onTimeAxisClick,
       showChangeBarSize,
       canMoveBar,
+      timeAxisMinorStyle,
       hideTable,
     ]
   )
