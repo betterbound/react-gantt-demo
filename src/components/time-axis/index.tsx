@@ -7,7 +7,7 @@ import Context from '../../context'
 import './index.less'
 
 const TimeAxis: React.FC = () => {
-  const { store, prefixCls, onTimeAxisClick } = useContext(Context)
+  const { store, prefixCls, onTimeAxisClick, timeAxisMinorStyle } = useContext(Context)
   const prefixClsTimeAxis = `${prefixCls}-time-axis`
   const { sightConfig, isToday } = store
   const majorList = store.getMajorList()
@@ -68,7 +68,7 @@ const TimeAxis: React.FC = () => {
               key={item.key}
               type='button'
               className={classNames(`${prefixClsTimeAxis}-minor`)}
-              style={{ width: item.width, left: item.left }}
+              style={{ width: item.width, left: item.left, ...timeAxisMinorStyle }}
               value={item.key}
               onClick={handleClick}
             >

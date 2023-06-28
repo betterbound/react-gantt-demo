@@ -111,6 +111,7 @@ const App = () => {
         renderDaysText={() => ''}
         showChangeBarSize={false}
         canMoveBar={false}
+        timeAxisMinorStyle={{ color: '#006ec8' }} 
       />
     </div>
   )
