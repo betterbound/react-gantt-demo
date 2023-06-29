@@ -6587,9 +6587,10 @@ var TableRows = function TableRows() {
       style: {
         textAlign: 'center',
         color: ' rgba(0,0,0,0.65)',
-        marginTop: 30
+        marginTop: 30,
+        fontSize: 14
       }
-    }, "\u6682\u65E0\u6570\u636E");
+    }, "\u8A72\u5F53\u3059\u308B\u30C7\u30FC\u30BF\u304C\u3042\u308A\u307E\u305B\u3093");
   }
 
   return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar, rowIndex) {
