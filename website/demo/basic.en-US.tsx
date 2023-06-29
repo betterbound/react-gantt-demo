@@ -74,7 +74,7 @@ function createData(len: number) {
 }
 
 const App = () => {
-  const [data, setData] = useState(createData(40))
+  const [data, setData] = useState(createData(0))
   console.log('data', data)
   const handleClick = (e) => {
     console.log(e, e.currentTarget.value, e.currentTarget.innerText)
