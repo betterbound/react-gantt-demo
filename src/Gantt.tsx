@@ -68,6 +68,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   showChangeBarSize?: boolean
   canMoveBar?: boolean
   timeAxisMinorStyle?: {}
+  allowAddBar?: boolean
   /**
    * 自定义日期筛选维度
    */
@@ -150,6 +151,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     showChangeBarSize = true,
     canMoveBar = true,
     timeAxisMinorStyle,
+    allowAddBar = true,
     customSights = [],
     locale = { ...defaultLocale },
     hideTable = false,
@@ -216,6 +218,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       showChangeBarSize,
       canMoveBar,
       timeAxisMinorStyle,
+      allowAddBar,
       hideTable,
     }),
     [
@@ -242,6 +245,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       showChangeBarSize,
       canMoveBar,
       timeAxisMinorStyle,
+      allowAddBar,
       hideTable,
     ]
   )

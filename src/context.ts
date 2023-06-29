@@ -44,6 +44,7 @@ export interface GanttContext<RecordType = DefaultRecordType> {
   showChangeBarSize?: boolean
   canMoveBar?: boolean
   timeAxisMinorStyle?: {}
+  allowAddBar?: boolean
 
   hideTable?: boolean
 }

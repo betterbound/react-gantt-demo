@@ -27,6 +27,7 @@ const App = () => (
         console.log('update', row, startDate, endDate)
         return true
       }}
+      allowAddBar={false}
     />
   </div>
 )
