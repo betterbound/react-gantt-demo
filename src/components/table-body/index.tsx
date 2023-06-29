@@ -21,9 +21,10 @@ const TableRows = () => {
           textAlign: 'center',
           color: ' rgba(0,0,0,0.65)',
           marginTop: 30,
+          fontSize: 14,
         }}
       >
-        暂无数据
+        該当するデータがありません
       </div>
     )
   }
