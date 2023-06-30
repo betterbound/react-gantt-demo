@@ -37,6 +37,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
     showChangeBarSize?: boolean;
     canMoveBar?: boolean;
     timeAxisMinorStyle?: {};
+    allowAddBar?: boolean;
     /**
      * 自定义日期筛选维度
      */

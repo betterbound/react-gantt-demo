@@ -6015,7 +6015,8 @@ var TaskBarItems$1 = observer(TaskBarItems);
 
 var BarList = function BarList() {
   var _useContext = useContext(context),
-      store = _useContext.store;
+      store = _useContext.store,
+      allowAddBar = _useContext.allowAddBar;
 
   var barList = store.getBarList;
   var _store$getVisibleRows = store.getVisibleRows,
@@ -6035,7 +6036,7 @@ var BarList = function BarList() {
         barItem: barItem
       });
     });
-    return bar.invalidDateRange ? /*#__PURE__*/React.createElement(InvalidTaskBar$1, {
+    return bar.invalidDateRange && allowAddBar ? /*#__PURE__*/React.createElement(InvalidTaskBar$1, {
       key: bar.key,
       data: bar
     }) : /*#__PURE__*/React.createElement(TaskBar$1, {
@@ -7115,6 +7116,8 @@ var GanttComponent = function GanttComponent(props) {
       _props$canMoveBar = props.canMoveBar,
       canMoveBar = _props$canMoveBar === void 0 ? true : _props$canMoveBar,
       timeAxisMinorStyle = props.timeAxisMinorStyle,
+      _props$allowAddBar = props.allowAddBar,
+      allowAddBar = _props$allowAddBar === void 0 ? true : _props$allowAddBar,
       _props$customSights = props.customSights,
       customSights = _props$customSights === void 0 ? [] : _props$customSights,
       _props$locale = props.locale,
@@ -7185,9 +7188,10 @@ var GanttComponent = function GanttComponent(props) {
       showChangeBarSize: showChangeBarSize,
       canMoveBar: canMoveBar,
       timeAxisMinorStyle: timeAxisMinorStyle,
+      allowAddBar: allowAddBar,
       hideTable: hideTable
     };
-  }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, renderDaysText, onExpand, onTimeAxisClick, showChangeBarSize, canMoveBar, timeAxisMinorStyle, hideTable]);
+  }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, renderDaysText, onExpand, onTimeAxisClick, showChangeBarSize, canMoveBar, timeAxisMinorStyle, allowAddBar, hideTable]);
   return /*#__PURE__*/React.createElement(context.Provider, {
     value: ContextValue
   }, /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("header", null, !hideTable && /*#__PURE__*/React.createElement(TableHeader$1, null), /*#__PURE__*/React.createElement(TimeAxis$1, null)), /*#__PURE__*/React.createElement("main", {
