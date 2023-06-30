@@ -8,7 +8,7 @@ import TaskBar from '../task-bar'
 import TaskBarItems from '../task-bar-items'
 
 const BarList: React.FC = () => {
-  const { store } = useContext(Context)
+  const { store, allowAddBar } = useContext(Context)
   const barList = store.getBarList
   const { count, start } = store.getVisibleRows
   return (
@@ -19,7 +19,7 @@ const BarList: React.FC = () => {
         if (bar.record.barItems)
           return bar.record.barItems.map(barItem => <TaskBarItems key={barItem.id} data={bar} barItem={barItem} />)
 
-        return bar.invalidDateRange ? <InvalidTaskBar key={bar.key} data={bar} /> : <TaskBar key={bar.key} data={bar} />
+        return bar.invalidDateRange && allowAddBar ? <InvalidTaskBar key={bar.key} data={bar} /> : <TaskBar key={bar.key} data={bar} />
       })}
     </div>
   )
