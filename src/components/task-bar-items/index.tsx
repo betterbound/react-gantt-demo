@@ -33,6 +33,7 @@ const TaskBarItems: React.FC<TaskBarProps> = ({ data, barItem }) => {
       className={prefixClsTaskBar}
       style={{
         transform: `translate(${translateX}px, ${translateY}px)`,
+        zIndex: 1 // zIndexを指定することでバーの上に成果物を表示する
       }}
     >
       {loading && <div className={`${prefixClsTaskBar}-loading`} />}

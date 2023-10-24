@@ -16,8 +16,16 @@ const BarList: React.FC = () => {
       {barList.slice(start, start + count).map(bar => {
         if (bar._group) return <GroupBar key={bar.key} data={bar} />
 
-        if (bar.record.barItems)
-          return bar.record.barItems.map(barItem => <TaskBarItems key={barItem.id} data={bar} barItem={barItem} />)
+        if (bar.record.barItems){
+          return (
+            bar.record.barItems.map(barItem => (
+              <div key={barItem.id} style={{ display: 'flex', flexDirection: 'column' }}>
+                <TaskBar key={bar.key} data={bar} />
+                <TaskBarItems data={bar} barItem={barItem} />
+              </div>
+            ))
+          )
+        }
 
         return bar.invalidDateRange && allowAddBar ? <InvalidTaskBar key={bar.key} data={bar} /> : <TaskBar key={bar.key} data={bar} />
       })}
