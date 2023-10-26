@@ -6002,7 +6002,9 @@ var TaskBarItems = function TaskBarItems(_ref) {
     role: 'none',
     className: prefixClsTaskBar,
     style: {
-      transform: "translate(".concat(translateX, "px, ").concat(translateY, "px)")
+      transform: "translate(".concat(translateX, "px, ").concat(translateY, "px)"),
+      zIndex: 1 // zIndexを指定することでバーの上に成果物を表示する
+
     }
   }, loading && /*#__PURE__*/React.createElement("div", {
     className: "".concat(prefixClsTaskBar, "-loading")
@@ -6029,13 +6031,25 @@ var BarList = function BarList() {
       key: bar.key,
       data: bar
     });
-    if (bar.record.barItems) return bar.record.barItems.map(function (barItem) {
-      return /*#__PURE__*/React.createElement(TaskBarItems$1, {
-        key: barItem.id,
-        data: bar,
-        barItem: barItem
+
+    if (bar.record.barItems) {
+      return bar.record.barItems.map(function (barItem) {
+        return /*#__PURE__*/React.createElement("div", {
+          key: barItem.id,
+          style: {
+            display: 'flex',
+            flexDirection: 'column'
+          }
+        }, /*#__PURE__*/React.createElement(TaskBar$1, {
+          key: bar.key,
+          data: bar
+        }), /*#__PURE__*/React.createElement(TaskBarItems$1, {
+          data: bar,
+          barItem: barItem
+        }));
       });
-    });
+    }
+
     return bar.invalidDateRange && allowAddBar ? /*#__PURE__*/React.createElement(InvalidTaskBar$1, {
       key: bar.key,
       data: bar
