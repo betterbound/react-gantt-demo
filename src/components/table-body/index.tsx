@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import classNames from 'classnames'
 import Context from '../../context'
@@ -62,6 +62,7 @@ const TableRows = () => {
                   textAlign: column.align ? column.align : 'left',
                   paddingLeft: index === 0 && tableIndent * (bar._depth + 1) + 10,
                   ...column.style,
+                  background: bar.record.className
                 }}
               >
                 {index === 0 &&
