@@ -7,6 +7,7 @@ interface Data {
   name: string
   startDate: string
   endDate: string
+  className: string
   barItems?: {
     id: string
     icon: JSX.Element
@@ -24,18 +25,21 @@ function createData(len: number) {
       name: `Title${i}`,
       startDate: dayjs().subtract(-i, 'day').format('YYYY-MM-DD'),
       endDate: dayjs().add(i, 'day').format('YYYY-MM-DD'),
+      className: 'blue',
       children: [
         {
           id: i,
           name: `Title${i}`,
           startDate: dayjs().subtract(-i, 'day').format('YYYY-MM-DD'),
           endDate: dayjs().add(i, 'day').format('YYYY-MM-DD'),
+          className: 'gray',
           children: [
             {
               id: i,
               name: `Title${i}`,
               startDate: dayjs().subtract(-i, 'day').format('YYYY-MM-DD'),
               endDate: dayjs().add(i, 'day').format('YYYY-MM-DD'),
+              className: 'white',
               barItems: [
                 {
                   id: `${i}-1`,

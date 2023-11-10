@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import classNames from 'classnames'
 import Context from '../../context'
@@ -42,7 +42,7 @@ const TableRows = () => {
           <div
             key={bar.key}
             role='none'
-            className={`${prefixClsTableBody}-row`}
+            className={`${prefixClsTableBody}-row ${bar.record.className}`}
             style={{
               height: rowHeight,
               top: (rowIndex + start) * rowHeight + TOP_PADDING,
