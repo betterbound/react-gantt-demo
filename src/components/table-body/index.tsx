@@ -42,7 +42,7 @@ const TableRows = () => {
           <div
             key={bar.key}
             role='none'
-            className={`${prefixClsTableBody}-row`}
+            className={`${prefixClsTableBody}-row ${bar.record.className}`}
             style={{
               height: rowHeight,
               top: (rowIndex + start) * rowHeight + TOP_PADDING,
@@ -62,7 +62,6 @@ const TableRows = () => {
                   textAlign: column.align ? column.align : 'left',
                   paddingLeft: index === 0 && tableIndent * (bar._depth + 1) + 10,
                   ...column.style,
-                  background: bar.record.className
                 }}
               >
                 {index === 0 &&
