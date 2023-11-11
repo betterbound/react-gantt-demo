@@ -6617,7 +6617,7 @@ var TableRows = function TableRows() {
     return /*#__PURE__*/React.createElement("div", {
       key: bar.key,
       role: 'none',
-      className: "".concat(prefixClsTableBody, "-row"),
+      className: "".concat(prefixClsTableBody, "-row ").concat(bar.record.className),
       style: {
         height: rowHeight,
         top: (rowIndex + start) * rowHeight + TOP_PADDING
