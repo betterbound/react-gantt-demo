@@ -89,7 +89,7 @@ export declare namespace Gantt {
         maxWidth?: number;
         flex?: number;
         name: string;
-        label: string;
+        label: string | React.ReactNode;
         style?: Object;
         render?: (item: Record<RecordType>) => React.ReactNode;
         align?: ColumnAlign;
