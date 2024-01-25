@@ -7,11 +7,15 @@ export declare const ONE_DAY_MS = 86400000;
 export declare const getViewTypeList: (locale: any) => Gantt.SightConfig[];
 declare function isRestDay(date: string): boolean;
 declare class GanttStore {
-    constructor({ rowHeight, disabled, customSights, locale, }: {
+    constructor({ rowHeight, disabled, customSights, locale, tableSize }: {
         rowHeight: number;
         disabled: boolean;
         customSights: Gantt.SightConfig[];
         locale: GanttLocale;
+        tableSize: {
+            minWidth?: number;
+            maxWidth?: number;
+        };
     });
     locale: {
         today: string;

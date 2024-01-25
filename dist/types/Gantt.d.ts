@@ -48,9 +48,9 @@ export interface GanttProps<RecordType = DefaultRecordType> {
      */
     hideTable?: boolean;
     tableSize?: {
-      minWidth?: number
-      maxWidth?: number
-    }
+        minWidth?: number;
+        maxWidth?: number;
+    };
 }
 export interface GanttRef {
     backToday: () => void;

@@ -4784,7 +4784,8 @@ var GanttStore = /*#__PURE__*/function () {
         _ref$disabled = _ref.disabled,
         disabled = _ref$disabled === void 0 ? false : _ref$disabled,
         customSights = _ref.customSights,
-        locale = _ref.locale;
+        locale = _ref.locale,
+        tableSize = _ref.tableSize;
 
     _classCallCheck(this, GanttStore);
 
@@ -4917,7 +4918,7 @@ var GanttStore = /*#__PURE__*/function () {
     var viewWidth = 704;
     var tableWidth = 500;
     this.viewWidth = viewWidth;
-    this.tableWidth = tableWidth;
+    this.tableWidth = (tableSize === null || tableSize === void 0 ? void 0 : tableSize.minWidth) || tableWidth;
     this.translateX = translateX;
     this.sightConfig = sightConfig;
     this.bodyWidth = bodyWidth;
@@ -6513,8 +6514,8 @@ var Divider = function Divider() {
     initSize: {
       width: tableWidth
     },
-    minWidth: tableSize.minWidth,
-    maxWidth: tableSize.maxWidth
+    minWidth: (tableSize === null || tableSize === void 0 ? void 0 : tableSize.minWidth) || 200,
+    maxWidth: (tableSize === null || tableSize === void 0 ? void 0 : tableSize.maxWidth) || store.width * 0.6
   }),
       _useDragResize2 = _slicedToArray(_useDragResize, 2),
       handleMouseDown = _useDragResize2[0],
@@ -7260,17 +7261,14 @@ var GanttComponent = function GanttComponent(props) {
       locale = _props$locale === void 0 ? _objectSpread2({}, defaultLocale) : _props$locale,
       _props$hideTable = props.hideTable,
       hideTable = _props$hideTable === void 0 ? false : _props$hideTable,
-      _props$tableSize = props.tableSize,
-      tableSize = _props$tableSize === void 0 ? {
-    minWidth: 500,
-    maxWidth: 890
-  } : _props$tableSize;
+      tableSize = props.tableSize;
   var store = useMemo(function () {
     return new GanttStore({
       rowHeight: rowHeight,
       disabled: disabled,
       customSights: customSights,
-      locale: locale
+      locale: locale,
+      tableSize: tableSize
     });
   }, [rowHeight]);
   useEffect(function () {
