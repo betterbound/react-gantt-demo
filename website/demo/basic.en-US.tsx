@@ -78,7 +78,7 @@ function createData(len: number) {
 }
 
 const App = () => {
-  const [data, setData] = useState(createData(0))
+  const [data, setData] = useState(createData(10))
   console.log('data', data)
   const handleClick = (e) => {
     console.log(e, e.currentTarget.value, e.currentTarget.innerText)
@@ -91,9 +91,14 @@ const App = () => {
           {
             name: 'name',
             label: 'Custom Title',
+          },
+          {
+            name: 'name',
+            label: 'Custom Title',
             width: 100,
           },
         ]}
+        // onExpand={}
         unit='week_in_month'
         showUnitSwitch={false}
         locale={enUS}
@@ -115,7 +120,11 @@ const App = () => {
         renderDaysText={() => ''}
         showChangeBarSize={false}
         canMoveBar={false}
-        timeAxisMinorStyle={{ color: '#006ec8' }} 
+        timeAxisMinorStyle={{ color: '#006ec8' }}
+        tableSize={{
+          minWidth: 300,
+          maxWidth: 890,
+        }}
       />
     </div>
   )

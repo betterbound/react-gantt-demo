@@ -44,6 +44,10 @@ export interface GanttContext<RecordType = DefaultRecordType> {
     timeAxisMinorStyle?: {};
     allowAddBar?: boolean;
     hideTable?: boolean;
+    tableSize?: {
+        minWidth?: number;
+        maxWidth?: number;
+    }
 }
 declare const context: React.Context<GanttContext<DefaultRecordType>>;
 export default context;

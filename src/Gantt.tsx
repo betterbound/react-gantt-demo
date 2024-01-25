@@ -79,6 +79,10 @@ export interface GanttProps<RecordType = DefaultRecordType> {
    * 隐藏左侧表格
    */
   hideTable?: boolean
+  tableSize?: {
+    minWidth?: number
+    maxWidth?: number
+  }
 }
 export interface GanttRef {
   backToday: () => void
@@ -155,6 +159,10 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     customSights = [],
     locale = { ...defaultLocale },
     hideTable = false,
+    tableSize = {
+      minWidth: 500,
+      maxWidth: 890,
+    }
   } = props
 
   const store = useMemo(() => new GanttStore({ rowHeight, disabled, customSights, locale }), [rowHeight])
@@ -220,6 +228,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       timeAxisMinorStyle,
       allowAddBar,
       hideTable,
+      tableSize
     }),
     [
       store,
@@ -247,6 +256,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       timeAxisMinorStyle,
       allowAddBar,
       hideTable,
+      tableSize
     ]
   )
 
@@ -262,6 +272,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
           {!hideTable && <TableBody />}
           <Chart />
         </main>
+        {!hideTable && <Divider />}
         {showBackToday && <TimeIndicator />}
         {showUnitSwitch && <TimeAxisScaleSelect />}
         <ScrollBar />

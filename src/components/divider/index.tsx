@@ -6,17 +6,18 @@ import Context from '../../context'
 import './index.less'
 
 const Divider: React.FC = () => {
-  const { store, tableCollapseAble, prefixCls } = useContext(Context)
+  const { store, tableCollapseAble,tableSize, prefixCls } = useContext(Context)
   const prefixClsDivider = `${prefixCls}-divider`
   const { tableWidth } = store
 
-  const handleClick = useCallback(
-    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      event.stopPropagation()
-      store.toggleCollapse()
-    },
-    [store]
-  )
+  // MEMO: 後々使用する可能性を考慮して一旦コメントアウトで対応
+  // const handleClick = useCallback(
+  //   (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  //     event.stopPropagation()
+  //     store.toggleCollapse()
+  //   },
+  //   [store]
+  // )
   const left = tableWidth
 
   const handleResize = useCallback(
@@ -29,8 +30,8 @@ const Divider: React.FC = () => {
     initSize: {
       width: tableWidth,
     },
-    minWidth: 200,
-    maxWidth: store.width * 0.6,
+    minWidth: tableSize.minWidth,
+    maxWidth: tableSize.maxWidth,
   })
   return (
     <div
@@ -55,7 +56,8 @@ const Divider: React.FC = () => {
         />
       )}
       <hr />
-      {tableCollapseAble && (
+      {/* MEMO: 後々使用する可能性を考慮して一旦コメントアウトで対応 */}
+      {/* {tableCollapseAble && (
         <div
           className={`${prefixClsDivider}-icon-wrapper`}
           role='none'
@@ -68,7 +70,7 @@ const Divider: React.FC = () => {
             })}
           />
         </div>
-      )}
+      )} */}
     </div>
   )
 }
