@@ -71,11 +71,13 @@ class GanttStore {
     disabled = false,
     customSights,
     locale,
+    tableSize
   }: {
     rowHeight: number
     disabled: boolean
     customSights: Gantt.SightConfig[]
     locale: GanttLocale
+    tableSize: { minWidth?: number; maxWidth?: number }
   }) {
     this.width = 1320
     this.height = 418
@@ -86,7 +88,7 @@ class GanttStore {
     const viewWidth = 704
     const tableWidth = 500
     this.viewWidth = viewWidth
-    this.tableWidth = tableWidth
+    this.tableWidth = tableSize?.minWidth || tableWidth
     this.translateX = translateX
     this.sightConfig = sightConfig
     this.bodyWidth = bodyWidth
