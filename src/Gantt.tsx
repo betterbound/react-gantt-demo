@@ -159,13 +159,10 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     customSights = [],
     locale = { ...defaultLocale },
     hideTable = false,
-    tableSize = {
-      minWidth: 500,
-      maxWidth: 890,
-    }
+    tableSize
   } = props
 
-  const store = useMemo(() => new GanttStore({ rowHeight, disabled, customSights, locale }), [rowHeight])
+  const store = useMemo(() => new GanttStore({ rowHeight, disabled, customSights, locale, tableSize }), [rowHeight])
   useEffect(() => {
     store.setData(data, startDateKey, endDateKey)
   }, [data, endDateKey, startDateKey, store])

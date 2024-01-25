@@ -6,7 +6,7 @@ import Context from '../../context'
 import './index.less'
 
 const Divider: React.FC = () => {
-  const { store, tableCollapseAble,tableSize, prefixCls } = useContext(Context)
+  const { store, tableCollapseAble, tableSize, prefixCls } = useContext(Context)
   const prefixClsDivider = `${prefixCls}-divider`
   const { tableWidth } = store
 
@@ -30,8 +30,8 @@ const Divider: React.FC = () => {
     initSize: {
       width: tableWidth,
     },
-    minWidth: tableSize.minWidth,
-    maxWidth: tableSize.maxWidth,
+    minWidth: tableSize?.minWidth || 200,
+    maxWidth: tableSize?.maxWidth || store.width * 0.6,
   })
   return (
     <div
