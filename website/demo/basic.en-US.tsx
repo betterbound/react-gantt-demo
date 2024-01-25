@@ -91,11 +91,31 @@ const App = () => {
           {
             name: 'name',
             label: 'Custom Title',
+            width: 52,
+          },
+          {
+            name: 'name',
+            label: 'Custom Title',
+          },
+          {
+            name: 'name',
+            label: 'Custom Title',
+            width: 40,
+          },
+          {
+            name: 'name',
+            label: 'Custom Title',
+            width: 55,
           },
           {
             name: 'name',
             label: 'Custom Title',
             width: 100,
+          },
+          {
+            name: 'name',
+            label: 'Custom Title',
+            width: 85,
           },
         ]}
         // onExpand={}
@@ -122,8 +142,8 @@ const App = () => {
         canMoveBar={false}
         timeAxisMinorStyle={{ color: '#006ec8' }}
         tableSize={{
-          minWidth: 300,
-          maxWidth: 890,
+          minWidth: 684,
+          maxWidth: 1080,
         }}
       />
     </div>
