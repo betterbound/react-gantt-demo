@@ -10,7 +10,7 @@ const Divider: React.FC = () => {
   const prefixClsDivider = `${prefixCls}-divider`
   const { tableWidth } = store
 
-  // MEMO: 一旦コメントアウトで対応
+  // MEMO: 後々使用する可能性を考慮して一旦コメントアウトで対応
   // const handleClick = useCallback(
   //   (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
   //     event.stopPropagation()
@@ -56,7 +56,7 @@ const Divider: React.FC = () => {
         />
       )}
       <hr />
-      {/* MEMO: 一旦コメントアウトで対応 */}
+      {/* MEMO: 後々使用する可能性を考慮して一旦コメントアウトで対応 */}
       {/* {tableCollapseAble && (
         <div
           className={`${prefixClsDivider}-icon-wrapper`}
