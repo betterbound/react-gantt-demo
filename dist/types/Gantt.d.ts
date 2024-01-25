@@ -47,6 +47,10 @@ export interface GanttProps<RecordType = DefaultRecordType> {
      * 隐藏左侧表格
      */
     hideTable?: boolean;
+    tableSize?: {
+      minWidth?: number
+      maxWidth?: number
+    }
 }
 export interface GanttRef {
     backToday: () => void;

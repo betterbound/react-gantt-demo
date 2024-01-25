@@ -47,6 +47,10 @@ export interface GanttContext<RecordType = DefaultRecordType> {
   allowAddBar?: boolean
 
   hideTable?: boolean
+  tableSize?: {
+    minWidth?: number
+    maxWidth?: number
+  }
 }
 const context = createContext<GanttContext>({} as GanttContext)
 export default context
