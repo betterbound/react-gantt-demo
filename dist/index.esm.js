@@ -270,8 +270,8 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z$h = ".gantt-group-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-group-bar .gantt-bar {\n  position: relative;\n  top: -3px;\n}\n";
-styleInject(css_248z$h);
+var css_248z$i = ".gantt-group-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-group-bar .gantt-bar {\n  position: relative;\n  top: -3px;\n}\n";
+styleInject(css_248z$i);
 
 var height = 8;
 
@@ -677,8 +677,8 @@ var DragResize = function DragResize(_ref) {
 
 var DragResize$1 = observer(DragResize);
 
-var css_248z$g = ".gantt-invalid-task-bar {\n  position: absolute;\n  left: 0;\n  width: 100vw;\n}\n.gantt-invalid-task-bar-block {\n  position: absolute;\n  width: 16px;\n  min-width: 8px;\n  height: 9px;\n  left: 0;\n  border: 1px solid;\n  border-radius: 2px;\n  cursor: pointer;\n  z-index: 1;\n}\n.gantt-invalid-task-bar-date {\n  position: absolute;\n  top: -6px;\n  white-space: nowrap;\n  color: #262626;\n  font-size: 12px;\n}\n";
-styleInject(css_248z$g);
+var css_248z$h = ".gantt-invalid-task-bar {\n  position: absolute;\n  left: 0;\n  width: 100vw;\n}\n.gantt-invalid-task-bar-block {\n  position: absolute;\n  width: 16px;\n  min-width: 8px;\n  height: 9px;\n  left: 0;\n  border: 1px solid;\n  border-radius: 2px;\n  cursor: pointer;\n  z-index: 1;\n}\n.gantt-invalid-task-bar-date {\n  position: absolute;\n  top: -6px;\n  white-space: nowrap;\n  color: #262626;\n  font-size: 12px;\n}\n";
+styleInject(css_248z$h);
 
 var barH = 8;
 var startX = 0;
@@ -5763,8 +5763,8 @@ __decorate([action], GanttStore.prototype, "updateBarSize", null);
 
 __decorate([action], GanttStore.prototype, "updateTaskDate", null);
 
-var css_248z$f = ".gantt-task-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-task-bar-loading {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  cursor: not-allowed;\n  z-index: 9;\n}\n.gantt-task-bar-bar {\n  position: relative;\n  height: 8px;\n  line-height: 8px;\n  border-radius: 4px;\n  top: -1px;\n  cursor: pointer;\n}\n.gantt-task-bar-invalid-date-range {\n  display: none;\n}\n.gantt-task-bar-resize-bg {\n  position: absolute;\n  left: 0;\n  top: -5px;\n  border-radius: 4px;\n  box-shadow: 0 2px 4px 0 #f7f7f7;\n  border: 1px solid #f0f0f0;\n  background-color: #fff;\n}\n.gantt-task-bar-resize-bg-compact {\n  height: 17px;\n}\n.gantt-task-bar-resize-handle {\n  position: absolute;\n  left: 0;\n  top: -4px;\n  width: 14px;\n  height: 16px;\n  z-index: 3;\n  background: white;\n}\n.gantt-task-bar-resize-handle:after,\n.gantt-task-bar-resize-handle:before {\n  position: absolute;\n  top: 4px;\n  bottom: 16px;\n  width: 2px;\n  height: 8px;\n  border-radius: 2px;\n  background-color: #d9d9d9;\n  content: '';\n}\n.gantt-task-bar-resize-handle-disabled {\n  cursor: not-allowed !important;\n}\n.gantt-task-bar-resize-handle-left {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-left:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-left:after {\n  right: 4px;\n}\n.gantt-task-bar-resize-handle-right {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-right:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-right:after {\n  right: 4px;\n}\n.gantt-task-bar-date-text {\n  color: #262626;\n}\n.gantt-task-bar-date-text,\n.gantt-task-bar-label {\n  position: absolute;\n  white-space: nowrap;\n  font-size: 12px;\n  top: -6px;\n}\n.gantt-task-bar-label {\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  height: 16px;\n  cursor: pointer;\n  top: -14px;\n}\n";
-styleInject(css_248z$f);
+var css_248z$g = ".gantt-task-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-task-bar-loading {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  cursor: not-allowed;\n  z-index: 9;\n}\n.gantt-task-bar-bar {\n  position: relative;\n  height: 8px;\n  line-height: 8px;\n  border-radius: 4px;\n  top: -1px;\n  cursor: pointer;\n}\n.gantt-task-bar-invalid-date-range {\n  display: none;\n}\n.gantt-task-bar-resize-bg {\n  position: absolute;\n  left: 0;\n  top: -5px;\n  border-radius: 4px;\n  box-shadow: 0 2px 4px 0 #f7f7f7;\n  border: 1px solid #f0f0f0;\n  background-color: #fff;\n}\n.gantt-task-bar-resize-bg-compact {\n  height: 17px;\n}\n.gantt-task-bar-resize-handle {\n  position: absolute;\n  left: 0;\n  top: -4px;\n  width: 14px;\n  height: 16px;\n  z-index: 3;\n  background: white;\n}\n.gantt-task-bar-resize-handle:after,\n.gantt-task-bar-resize-handle:before {\n  position: absolute;\n  top: 4px;\n  bottom: 16px;\n  width: 2px;\n  height: 8px;\n  border-radius: 2px;\n  background-color: #d9d9d9;\n  content: '';\n}\n.gantt-task-bar-resize-handle-disabled {\n  cursor: not-allowed !important;\n}\n.gantt-task-bar-resize-handle-left {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-left:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-left:after {\n  right: 4px;\n}\n.gantt-task-bar-resize-handle-right {\n  cursor: col-resize;\n}\n.gantt-task-bar-resize-handle-right:before {\n  left: 4px;\n}\n.gantt-task-bar-resize-handle-right:after {\n  right: 4px;\n}\n.gantt-task-bar-date-text {\n  color: #262626;\n}\n.gantt-task-bar-date-text,\n.gantt-task-bar-label {\n  position: absolute;\n  white-space: nowrap;\n  font-size: 12px;\n  top: -6px;\n}\n.gantt-task-bar-label {\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  height: 16px;\n  cursor: pointer;\n  top: -14px;\n}\n";
+styleInject(css_248z$g);
 
 var RenderBar = function RenderBar(_ref) {
   var data = _ref.data;
@@ -5981,8 +5981,8 @@ var TaskBar = function TaskBar(_ref2) {
 
 var TaskBar$1 = observer(TaskBar);
 
-var css_248z$e = ".gantt-task-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-task-bar-loading {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  cursor: not-allowed;\n  z-index: 9;\n}\n";
-styleInject(css_248z$e);
+var css_248z$f = ".gantt-task-bar {\n  position: absolute;\n  top: 0;\n  left: 0;\n  display: flex;\n}\n.gantt-task-bar-loading {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  cursor: not-allowed;\n  z-index: 9;\n}\n";
+styleInject(css_248z$f);
 
 var TaskBarItems = function TaskBarItems(_ref) {
   var data = _ref.data,
@@ -6062,8 +6062,8 @@ var BarList = function BarList() {
 
 var BarList$1 = observer(BarList);
 
-var css_248z$d = ".gantt-task-bar-thumb {\n  position: absolute;\n  cursor: pointer;\n  white-space: nowrap;\n  z-index: 2;\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  font-size: 12px;\n  padding-right: 16px;\n  display: flex;\n  align-items: center;\n}\n.gantt-task-bar-thumb-left {\n  transform: translate(0);\n}\n.gantt-task-bar-thumb-right {\n  transform: translate(-100%);\n}\n.gantt-task-bar-thumb-circle-left {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-right: 10px;\n}\n.gantt-task-bar-thumb-circle-right {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-left: 10px;\n}\n";
-styleInject(css_248z$d);
+var css_248z$e = ".gantt-task-bar-thumb {\n  position: absolute;\n  cursor: pointer;\n  white-space: nowrap;\n  z-index: 2;\n  overflow: hidden;\n  max-width: 200px;\n  color: #595959;\n  text-overflow: ellipsis;\n  word-break: keep-all;\n  line-height: 16px;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  font-size: 12px;\n  padding-right: 16px;\n  display: flex;\n  align-items: center;\n}\n.gantt-task-bar-thumb-left {\n  transform: translate(0);\n}\n.gantt-task-bar-thumb-right {\n  transform: translate(-100%);\n}\n.gantt-task-bar-thumb-circle-left {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-right: 10px;\n}\n.gantt-task-bar-thumb-circle-right {\n  height: 10px;\n  width: 10px;\n  border-radius: 50%;\n  margin-left: 10px;\n}\n";
+styleInject(css_248z$e);
 
 var TaskBarThumb = function TaskBarThumb(_ref) {
   var _classNames;
@@ -6141,8 +6141,8 @@ var BarThumbList = function BarThumbList() {
 
 var BarThumbList$1 = observer(BarThumbList);
 
-var css_248z$c = ".task-dependency-line {\n  z-index: -1;\n}\n.task-dependency-line .line {\n  stroke: #f87872;\n}\n";
-styleInject(css_248z$c);
+var css_248z$d = ".task-dependency-line {\n  z-index: -1;\n}\n.task-dependency-line .line {\n  stroke: #f87872;\n}\n";
+styleInject(css_248z$d);
 
 var spaceX = 10;
 var spaceY = 10;
@@ -6235,7 +6235,7 @@ var Dependence = function Dependence(_ref) {
   var endPosition = type === 'start_finish' || type === 'finish_finish' ? -1 : 1;
   return /*#__PURE__*/React.createElement("g", {
     stroke: color,
-    className: css_248z$c['task-dependency-line']
+    className: css_248z$d['task-dependency-line']
   }, /*#__PURE__*/React.createElement("path", {
     style: {
       stroke: color
@@ -6311,8 +6311,8 @@ var DragPresent = function DragPresent() {
 
 var DragPresent$1 = observer(DragPresent);
 
-var css_248z$b = ".gantt-today {\n  position: absolute;\n  top: 0;\n  background: #096dd9;\n  width: 1px;\n  height: 1px;\n  text-align: center;\n  line-height: 1px;\n  border-radius: 50%;\n  font-size: 12px;\n  color: #ffffff;\n  pointer-events: none;\n}\n.gantt-today_line {\n  width: 1px;\n  background: #096dd9;\n  margin-left: 15px;\n}\n";
-styleInject(css_248z$b);
+var css_248z$c = ".gantt-today {\n  position: absolute;\n  top: 0;\n  background: #096dd9;\n  width: 1px;\n  height: 1px;\n  text-align: center;\n  line-height: 1px;\n  border-radius: 50%;\n  font-size: 12px;\n  color: #ffffff;\n  pointer-events: none;\n}\n.gantt-today_line {\n  width: 1px;\n  background: #096dd9;\n  margin-left: 15px;\n}\n";
+styleInject(css_248z$c);
 
 var Today = function Today() {
   var _useContext = useContext(context),
@@ -6334,8 +6334,8 @@ var Today = function Today() {
 
 var Today$1 = observer(Today);
 
-var css_248z$a = ".gantt-chart {\n  position: absolute;\n  top: 0;\n  overflow-x: hidden;\n  overflow-y: hidden;\n}\n.gantt-chart-svg-renderer {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.gantt-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  will-change: transform;\n}\n";
-styleInject(css_248z$a);
+var css_248z$b = ".gantt-chart {\n  position: absolute;\n  top: 0;\n  overflow-x: hidden;\n  overflow-y: hidden;\n}\n.gantt-chart-svg-renderer {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.gantt-render-chunk {\n  position: absolute;\n  top: 0;\n  left: 0;\n  will-change: transform;\n}\n";
+styleInject(css_248z$b);
 
 var Chart = function Chart() {
   var _useContext = useContext(context),
@@ -6419,6 +6419,128 @@ var Chart = function Chart() {
 };
 
 var Chart$1 = /*#__PURE__*/memo(observer(Chart));
+
+function useDragResize(handleResize, _ref) {
+  var initSize = _ref.initSize,
+      minWidthConfig = _ref.minWidth,
+      maxWidthConfig = _ref.maxWidth;
+
+  var _useState = useState(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      resizing = _useState2[0],
+      setResizing = _useState2[1];
+
+  var positionRef = useRef({
+    left: 0
+  });
+  var initSizeRef = useRef(initSize);
+  var handleMouseMove = usePersistFn( /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(event) {
+      var distance, width;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              distance = event.clientX - positionRef.current.left;
+              width = initSizeRef.current.width + distance;
+
+              if (minWidthConfig !== undefined) {
+                width = Math.max(width, minWidthConfig);
+              }
+
+              if (maxWidthConfig !== undefined) {
+                width = Math.min(width, maxWidthConfig);
+              }
+
+              handleResize({
+                width: width
+              });
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function (_x) {
+      return _ref2.apply(this, arguments);
+    };
+  }());
+  var handleMouseUp = useCallback(function () {
+    window.removeEventListener('mousemove', handleMouseMove);
+    window.removeEventListener('mouseup', handleMouseUp);
+    setResizing(false);
+  }, [handleMouseMove]);
+  var handleMouseDown = useCallback(function (event) {
+    positionRef.current.left = event.clientX;
+    initSizeRef.current = initSize;
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    setResizing(true);
+  }, [handleMouseMove, handleMouseUp, initSize]);
+  return [handleMouseDown, resizing];
+}
+
+var css_248z$a = ".gantt-divider {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  cursor: col-resize;\n}\n.gantt-divider:hover hr {\n  border-color: #3b88f4;\n}\n.gantt-divider:hover hr:before {\n  background: #3b88f4;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper {\n  background-color: #3b88f4;\n  border-color: #3b88f4;\n  border-top: 0;\n  border-bottom: 0;\n  cursor: pointer;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper:after {\n  content: '';\n  right: -3px;\n  position: absolute;\n  width: 2px;\n  height: 30px;\n  background-color: transparent;\n}\n.gantt-divider:hover .gantt-divider-icon-wrapper .gantt-divider-arrow:after,\n.gantt-divider:hover .gantt-divider-icon-wrapper .gantt-divider-arrow:before {\n  background-color: #fff;\n}\n.gantt-divider > hr {\n  margin: 0;\n  height: 100%;\n  width: 0;\n  border: none;\n  border-right: 1px solid transparent;\n}\n.gantt-divider > .gantt-divider-icon-wrapper {\n  position: absolute;\n  left: 1px;\n  top: 50%;\n  transform: translateY(-50%);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 14px;\n  height: 30px;\n  border-radius: 0 4px 4px 0;\n  border: 1px solid #f0f0f0;\n  border-left: 0;\n  background-color: #fff;\n}\n.gantt-divider-arrow:before {\n  bottom: -1px;\n  transform: rotate(30deg);\n}\n.gantt-divider-arrow:after {\n  top: -1px;\n  transform: rotate(-30deg);\n}\n.gantt-divider-arrow:after,\n.gantt-divider-arrow:before {\n  content: '';\n  display: block;\n  position: relative;\n  width: 2px;\n  height: 8px;\n  background-color: #bfbfbf;\n  border-radius: 1px;\n}\n.gantt-divider-arrow.gantt-divider-reverse:before {\n  transform: rotate(-30deg);\n}\n.gantt-divider-arrow.gantt-divider-reverse:after {\n  transform: rotate(30deg);\n}\n.gantt-divider_only > hr:before {\n  content: '';\n  position: absolute;\n  border-top: 7px solid white;\n  border-bottom: 7px solid white;\n  background: #a7add0;\n  z-index: 2;\n  height: 26px;\n  top: 50%;\n  transform: translateY(-50%);\n  width: 2px;\n}\n.gantt-divider_only > hr {\n  border-color: #a7add0;\n}\n";
+styleInject(css_248z$a);
+
+var Divider = function Divider() {
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      tableCollapseAble = _useContext.tableCollapseAble,
+      tableSize = _useContext.tableSize,
+      prefixCls = _useContext.prefixCls;
+
+  var prefixClsDivider = "".concat(prefixCls, "-divider");
+  var tableWidth = store.tableWidth; // MEMO: 後々使用する可能性を考慮して一旦コメントアウトで対応
+  // const handleClick = useCallback(
+  //   (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  //     event.stopPropagation()
+  //     store.toggleCollapse()
+  //   },
+  //   [store]
+  // )
+
+  var left = tableWidth;
+  var handleResize = useCallback(function (_ref) {
+    var width = _ref.width;
+    store.handleResizeTableWidth(width);
+  }, [store]);
+
+  var _useDragResize = useDragResize(handleResize, {
+    initSize: {
+      width: tableWidth
+    },
+    minWidth: tableSize.minWidth,
+    maxWidth: tableSize.maxWidth
+  }),
+      _useDragResize2 = _slicedToArray(_useDragResize, 2),
+      handleMouseDown = _useDragResize2[0],
+      resizing = _useDragResize2[1];
+
+  return /*#__PURE__*/React.createElement("div", {
+    role: 'none',
+    className: classNames(prefixClsDivider, _defineProperty({}, "".concat(prefixClsDivider, "_only"), !tableCollapseAble)),
+    style: {
+      left: left - 1
+    },
+    onMouseDown: tableWidth === 0 ? undefined : handleMouseDown
+  }, resizing && /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0,
+      zIndex: 9999,
+      cursor: 'col-resize'
+    }
+  }), /*#__PURE__*/React.createElement("hr", null));
+};
+
+var Divider$1 = observer(Divider);
 
 var css_248z$9 = ".gantt-scroll_bar {\n  position: absolute;\n  bottom: 0;\n  left: 16px;\n  height: 12px;\n}\n.gantt-scroll_bar-thumb {\n  position: absolute;\n  height: 100%;\n  border-radius: 4px;\n  background-color: #262626;\n  opacity: 0.2;\n  cursor: pointer;\n  will-change: transform;\n}\n";
 styleInject(css_248z$9);
@@ -7137,7 +7259,12 @@ var GanttComponent = function GanttComponent(props) {
       _props$locale = props.locale,
       locale = _props$locale === void 0 ? _objectSpread2({}, defaultLocale) : _props$locale,
       _props$hideTable = props.hideTable,
-      hideTable = _props$hideTable === void 0 ? false : _props$hideTable;
+      hideTable = _props$hideTable === void 0 ? false : _props$hideTable,
+      _props$tableSize = props.tableSize,
+      tableSize = _props$tableSize === void 0 ? {
+    minWidth: 500,
+    maxWidth: 890
+  } : _props$tableSize;
   var store = useMemo(function () {
     return new GanttStore({
       rowHeight: rowHeight,
@@ -7203,15 +7330,16 @@ var GanttComponent = function GanttComponent(props) {
       canMoveBar: canMoveBar,
       timeAxisMinorStyle: timeAxisMinorStyle,
       allowAddBar: allowAddBar,
-      hideTable: hideTable
+      hideTable: hideTable,
+      tableSize: tableSize
     };
-  }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, renderDaysText, onExpand, onTimeAxisClick, showChangeBarSize, canMoveBar, timeAxisMinorStyle, allowAddBar, hideTable]);
+  }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, renderDaysText, onExpand, onTimeAxisClick, showChangeBarSize, canMoveBar, timeAxisMinorStyle, allowAddBar, hideTable, tableSize]);
   return /*#__PURE__*/React.createElement(context.Provider, {
     value: ContextValue
   }, /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("header", null, !hideTable && /*#__PURE__*/React.createElement(TableHeader$1, null), /*#__PURE__*/React.createElement(TimeAxis$1, null)), /*#__PURE__*/React.createElement("main", {
     ref: store.mainElementRef,
     onScroll: store.handleScroll
-  }, /*#__PURE__*/React.createElement(SelectionIndicator$1, null), !hideTable && /*#__PURE__*/React.createElement(TableBody$1, null), /*#__PURE__*/React.createElement(Chart$1, null)), showBackToday && /*#__PURE__*/React.createElement(TimeIndicator$1, null), showUnitSwitch && /*#__PURE__*/React.createElement(TimeAxisScaleSelect$1, null), /*#__PURE__*/React.createElement(ScrollBar$1, null), scrollTop && /*#__PURE__*/React.createElement(ScrollTop$1, null)));
+  }, /*#__PURE__*/React.createElement(SelectionIndicator$1, null), !hideTable && /*#__PURE__*/React.createElement(TableBody$1, null), /*#__PURE__*/React.createElement(Chart$1, null)), !hideTable && /*#__PURE__*/React.createElement(Divider$1, null), showBackToday && /*#__PURE__*/React.createElement(TimeIndicator$1, null), showUnitSwitch && /*#__PURE__*/React.createElement(TimeAxisScaleSelect$1, null), /*#__PURE__*/React.createElement(ScrollBar$1, null), scrollTop && /*#__PURE__*/React.createElement(ScrollTop$1, null)));
 };
 
 export { Gantt, GanttComponent as default, enUS, zhCN };
