@@ -83,7 +83,7 @@ class GanttStore {
     this.height = 418
     this.viewTypeList = customSights.length ? customSights : getViewTypeList(locale)
     const sightConfig = customSights.length ? customSights[0] : getViewTypeList(locale)[0]
-    const translateX = dayjs(this.getStartDate()).valueOf() / (sightConfig.value * 1000)
+    const translateX = dayjs('2024-04-01').subtract(10, 'days').valueOf() / (sightConfig.value * 1000)
     const bodyWidth = this.width
     const viewWidth = 704
     const tableWidth = 500
@@ -292,7 +292,7 @@ class GanttStore {
   }
 
   @computed get todayTranslateX() {
-    return dayjs().startOf('day').valueOf() / this.pxUnitAmp
+    return dayjs('2024-04-01').valueOf() / this.pxUnitAmp
   }
 
   @computed get scrollBarWidth() {
