@@ -28,6 +28,7 @@ const App = () => (
         return true
       }}
       allowAddBar={false}
+      unit='week_in_month'
     />
   </div>
 )

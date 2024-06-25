@@ -83,7 +83,7 @@ class GanttStore {
     this.height = 418
     this.viewTypeList = customSights.length ? customSights : getViewTypeList(locale)
     const sightConfig = customSights.length ? customSights[0] : getViewTypeList(locale)[0]
-    const translateX = dayjs('2024-04-01').valueOf() / (sightConfig.value * 1000)
+    const translateX = dayjs(this.getStartDate()).valueOf() / (sightConfig.value * 1000)
     const bodyWidth = this.width
     const viewWidth = 704
     const tableWidth = 500
@@ -276,7 +276,7 @@ class GanttStore {
     if (target) {
       this.sightConfig = target
       if(target.type === 'week_in_month')
-        this.setTranslateX(dayjs(this.getFirstDayOfLastMonth()).valueOf() / (target.value * 5000))
+        this.setTranslateX(dayjs('2024-04-01').subtract(10, 'weeks').valueOf() / (target.value * 5000))
       else
         this.setTranslateX(dayjs(this.getStartDate()).valueOf() / (target.value * 1000))
     }

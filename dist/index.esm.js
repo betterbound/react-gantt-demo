@@ -4913,7 +4913,7 @@ var GanttStore = /*#__PURE__*/function () {
     this.height = 418;
     this.viewTypeList = customSights.length ? customSights : getViewTypeList(locale);
     var sightConfig = customSights.length ? customSights[0] : getViewTypeList(locale)[0];
-    var translateX = dayjs('2024-04-01').valueOf() / (sightConfig.value * 1000);
+    var translateX = dayjs(this.getStartDate()).valueOf() / (sightConfig.value * 1000);
     var bodyWidth = this.width;
     var viewWidth = 704;
     var tableWidth = 500;
@@ -5051,7 +5051,7 @@ var GanttStore = /*#__PURE__*/function () {
 
       if (target) {
         this.sightConfig = target;
-        if (target.type === 'week_in_month') this.setTranslateX(dayjs(this.getFirstDayOfLastMonth()).valueOf() / (target.value * 5000));else this.setTranslateX(dayjs(this.getStartDate()).valueOf() / (target.value * 1000));
+        if (target.type === 'week_in_month') this.setTranslateX(dayjs('2024-04-01').subtract(10, 'weeks').valueOf() / (target.value * 5000));else this.setTranslateX(dayjs(this.getStartDate()).valueOf() / (target.value * 1000));
       }
     }
   }, {
