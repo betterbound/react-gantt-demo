@@ -4913,7 +4913,7 @@ var GanttStore = /*#__PURE__*/function () {
     this.height = 418;
     this.viewTypeList = customSights.length ? customSights : getViewTypeList(locale);
     var sightConfig = customSights.length ? customSights[0] : getViewTypeList(locale)[0];
-    var translateX = dayjs(this.getStartDate()).valueOf() / (sightConfig.value * 1000);
+    var translateX = dayjs('2024-04-01').subtract(10, 'days').valueOf() / (sightConfig.value * 1000);
     var bodyWidth = this.width;
     var viewWidth = 704;
     var tableWidth = 500;
@@ -5068,7 +5068,7 @@ var GanttStore = /*#__PURE__*/function () {
   }, {
     key: "todayTranslateX",
     get: function get() {
-      return dayjs().startOf('day').valueOf() / this.pxUnitAmp;
+      return dayjs('2024-04-01').valueOf() / this.pxUnitAmp;
     }
   }, {
     key: "scrollBarWidth",
