@@ -5051,7 +5051,7 @@ var GanttStore = /*#__PURE__*/function () {
 
       if (target) {
         this.sightConfig = target;
-        if (target.type === 'week_in_month') this.setTranslateX(dayjs('2024-04-01').subtract(10, 'weeks').valueOf() / (target.value * 5000));else this.setTranslateX(dayjs(this.getStartDate()).valueOf() / (target.value * 1000));
+        if (target.type === 'week_in_month') this.setTranslateX(dayjs('2024-06-30').subtract(5, 'weeks').valueOf() / (target.value * 5000));else this.setTranslateX(dayjs(this.getStartDate()).valueOf() / (target.value * 1000));
       }
     }
   }, {
@@ -5068,7 +5068,7 @@ var GanttStore = /*#__PURE__*/function () {
   }, {
     key: "todayTranslateX",
     get: function get() {
-      return dayjs('2024-04-01').valueOf() / this.pxUnitAmp;
+      return dayjs('2024-06-30').valueOf() / this.pxUnitAmp;
     }
   }, {
     key: "scrollBarWidth",

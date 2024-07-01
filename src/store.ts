@@ -276,7 +276,7 @@ class GanttStore {
     if (target) {
       this.sightConfig = target
       if(target.type === 'week_in_month')
-        this.setTranslateX(dayjs('2024-04-01').subtract(10, 'weeks').valueOf() / (target.value * 5000))
+        this.setTranslateX(dayjs('2024-06-30').subtract(5, 'weeks').valueOf() / (target.value * 5000))
       else
         this.setTranslateX(dayjs(this.getStartDate()).valueOf() / (target.value * 1000))
     }
@@ -292,7 +292,7 @@ class GanttStore {
   }
 
   @computed get todayTranslateX() {
-    return dayjs('2024-04-01').valueOf() / this.pxUnitAmp
+    return dayjs('2024-06-30').valueOf() / this.pxUnitAmp
   }
 
   @computed get scrollBarWidth() {
