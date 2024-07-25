@@ -41,7 +41,7 @@ const App = () => {
   return (
     <div style={{ width: '100%', height: 600 }}>
       <div style={{ width: '100%', height: 500 }}>
-        <RcGantt
+        {/* <RcGantt
           data={data}
           innerRef={ref}
           columns={[
@@ -60,9 +60,9 @@ const App = () => {
           hideTable={val3}
           alwaysShowTaskBar={val1}
           unit={val2}
-        />
+        /> */}
 
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {/* <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div>
             <input checked={val1} onChange={e => setVal1(e.target.checked)} type='checkbox' />
             alwaysShowTaskBar 是否永远展示左右侧文案
@@ -86,7 +86,7 @@ const App = () => {
               返回今日
             </Button>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )
