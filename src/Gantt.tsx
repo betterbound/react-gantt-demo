@@ -18,6 +18,7 @@ import './Gantt.less'
 import { zhCN } from './locales'
 import GanttStore from './store'
 import type { DefaultRecordType, Gantt } from './types'
+import type { ConvertedBarList } from './utils'
 
 const prefixCls = 'gantt'
 
@@ -65,6 +66,7 @@ export interface GanttProps<RecordType = DefaultRecordType> {
   renderDaysText?: GanttContext<RecordType>['renderDaysText']
   onExpand?: GanttContext<RecordType>['onExpand']
   onTimeAxisClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  orderedBarList?: (barList: ConvertedBarList) => void
   showChangeBarSize?: boolean
   canMoveBar?: boolean
   timeAxisMinorStyle?: {}
@@ -152,6 +154,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
     renderDaysText,
     onExpand,
     onTimeAxisClick,
+    orderedBarList,
     showChangeBarSize = true,
     canMoveBar = true,
     timeAxisMinorStyle,
@@ -220,6 +223,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       renderDaysText,
       onExpand,
       onTimeAxisClick,
+      orderedBarList,
       showChangeBarSize,
       canMoveBar,
       timeAxisMinorStyle,
@@ -248,6 +252,7 @@ const GanttComponent = <RecordType extends DefaultRecordType>(props: GanttProps<
       renderDaysText,
       onExpand,
       onTimeAxisClick,
+      orderedBarList,
       showChangeBarSize,
       canMoveBar,
       timeAxisMinorStyle,
