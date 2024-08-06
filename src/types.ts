@@ -77,6 +77,7 @@ export namespace Gantt {
     group?: boolean
     children?: Item<RecordType>[]
     _parent?: Item<RecordType>
+    _parents?: Item<RecordType>[]
     _bar?: Bar<RecordType>
     _depth?: number
     _index?: number
