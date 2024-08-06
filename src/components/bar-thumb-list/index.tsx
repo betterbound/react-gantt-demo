@@ -7,10 +7,9 @@ import TaskBarThumb from '../task-bar-thumb'
 const BarThumbList: React.FC = () => {
   const { store } = useContext(Context)
   const barList = store.getBarList
-  const { count, start } = store.getVisibleRows
   return (
     <>
-      {barList.slice(start, start + count).map(bar => {
+      {barList.map(bar => {
         if (store.getTaskBarThumbVisible(bar)) return <TaskBarThumb data={bar} key={bar.key} />
         return null
       })}

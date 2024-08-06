@@ -1,21 +1,22 @@
-import React, { useContext, useCallback, useState, useRef } from 'react'
+import React, { useCallback, useContext, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { usePersistFn } from 'ahooks'
 import Context from '../../context'
-import { Gantt } from '../../types'
+import type { Gantt } from '../../types'
 import DragResize from '../drag-resize'
 import './index.less'
 
 interface TaskBarProps {
   data: Gantt.Bar
+  translateY: number
 }
 const barH = 8
 let startX = 0
 const renderInvalidBarDefault = element => element
-const InvalidTaskBar: React.FC<TaskBarProps> = ({ data }) => {
+const InvalidTaskBar: React.FC<TaskBarProps> = ({ data, translateY }) => {
   const { store, prefixCls, renderInvalidBar = renderInvalidBarDefault } = useContext(Context)
   const triggerRef = useRef<HTMLDivElement>(null)
-  const { translateY, translateX, width, dateTextFormat, record } = data
+  const { translateX, width, dateTextFormat, record } = data
   const [visible, setVisible] = useState(false)
 
   const { disabled = false } = record || {}
