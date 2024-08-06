@@ -10,6 +10,69 @@ interface ConvertBar {
   parents?: Gantt.Item[] | undefined
 }
 
+export interface ConvertedBarList {
+  orderedBarList: {
+    id: string
+    depth: number
+  }[]
+  activeId: string
+  overId: string
+  parents:
+  | {
+    id: string
+    depth: number
+  }[]
+  | undefined
+}
+
+// MEMO: 再帰的に_childrenCountの合計を計算する関数
+export function getChildrenCount(barList: Gantt.Bar[]): number {
+  return barList.reduce((prev, curr) => {
+    if (curr._collapsed) return prev
+
+    const childrenCount = getChildrenCount(curr.children)
+    return prev + curr._childrenCount + childrenCount
+  }, 0)
+}
+
+// MEMO: アプリ側へ渡すデータに変換する関数
+export function convertBarList(barList: Gantt.Bar[], activeId: string, overId: string): ConvertedBarList {
+  const orderedBarList = barList.map(bar => {
+    return {
+      id: bar.record.id,
+      depth: bar._depth,
+    }
+  })
+  const parents = barList[0]._parents?.map((parent, index) => {
+    return { id: parent.record.id, depth: index }
+  })
+
+  return { orderedBarList, activeId, overId, parents }
+}
+
+export function convertItem(barList: Gantt.Bar[], depth = 0, parents?: Gantt.Bar[] | undefined): Gantt.Item[] {
+  return barList.map(bar => {
+    const item: Gantt.Item = {
+      key: bar.key,
+      content: bar.label,
+      startDate: bar.startDate,
+      endDate: bar.endDate,
+      record: bar.record,
+      collapsed: bar._collapsed,
+      group: bar._group,
+      _depth: bar._depth,
+      _index: depth,
+      _parent: parents && parents.length > 0 ? parents[parents.length - 1] : (undefined as any),
+      _parents: parents || ([] as any[]),
+      _bar: bar,
+      children:
+        bar.children.length > 0 ? convertItem(bar.children, bar._depth + 1, [...(parents || []), bar]) : undefined,
+    }
+
+    return item
+  })
+}
+
 export function convertBar({ data, pxUnitAmp, rowHeight, disabled, depth = 0, parents = [] }: ConvertBar) {
   // 最小宽度
   const minStamp = 11 * pxUnitAmp
@@ -91,14 +154,20 @@ export function convertBar({ data, pxUnitAmp, rowHeight, disabled, depth = 0, pa
  *
  * @param {any} arr 数据源
  */
-export function flattenDeep(array: Gantt.Item[] = [], depth = 0, parent?: Gantt.Item | undefined): Gantt.Item[] {
+// MEMO: ガントチャート側のデータで使用。_collapsed: true のデータは削除し、データをフラットにして position を計算している。
+export function flattenDeep(
+  array: Gantt.Bar[] = [],
+  depth = 0
+  // MEMO: 型を Item[] から Bar[] に変更したため parent は不要になる。別の文脈で必要になるかもなので、一旦コメントアウトで対応。
+  // parent?: Gantt.Bar | undefined
+): Gantt.Bar[] {
   let index = 0
-  return array.reduce((flat: Gantt.Item[], item) => {
+  return array.reduce((flat: Gantt.Bar[], item) => {
     item._depth = depth
-    item._parent = parent
+    // item._parent = parent
     item._index = index
     index += 1
-    return [...flat, item, ...(item.children && !item.collapsed ? flattenDeep(item.children, depth + 1, item) : [])]
+    return [...flat, item, ...(item.children && !item._collapsed ? flattenDeep(item.children, depth + 1) : [])]
   }, [])
 }
 
