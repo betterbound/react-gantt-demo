@@ -16,7 +16,7 @@ import { HEADER_HEIGHT, TOP_PADDING } from './constants'
 import type { GanttLocale, GanttProps as GanttProperties } from './Gantt'
 import { defaultLocale } from './Gantt'
 import { Gantt } from './types'
-import { flattenDeep, transverseData } from './utils'
+import { convertBar, transverseData } from './utils'
 
 dayjs.extend(weekday)
 dayjs.extend(weekOfYear)
@@ -671,72 +671,9 @@ class GanttStore {
   }
 
   @computed get getBarList(): Gantt.Bar[] {
-    const { pxUnitAmp, data } = this
-    // 最小宽度
-    const minStamp = 11 * pxUnitAmp
-    // TODO 去除高度读取
-    const height = 8
-    const baseTop = TOP_PADDING + this.rowHeight / 2 - height / 2
-    const topStep = this.rowHeight
+    const { pxUnitAmp, data, rowHeight, disabled } = this
 
-    const dateTextFormat = (startX: number) => dayjs(startX * pxUnitAmp).format('YYYY-MM-DD')
-
-    const getDateWidth = (start: number, endX: number) => {
-      const startDate = dayjs(start * pxUnitAmp)
-      const endDate = dayjs(endX * pxUnitAmp)
-      return `${startDate.diff(endDate, 'day') + 1}`
-    }
-
-    const flattenData = flattenDeep(data)
-    const barList = flattenData.map((item, index) => {
-      const valid = item.startDate && item.endDate
-      let startAmp = dayjs(item.startDate || 0)
-        .startOf('day')
-        .valueOf()
-      let endAmp = dayjs(item.endDate || 0)
-        .endOf('day')
-        .valueOf()
-
-      // 开始结束日期相同默认一天
-      if (Math.abs(endAmp - startAmp) < minStamp) {
-        startAmp = dayjs(item.startDate || 0)
-          .startOf('day')
-          .valueOf()
-        endAmp = dayjs(item.endDate || 0)
-          .endOf('day')
-          .add(minStamp, 'millisecond')
-          .valueOf()
-      }
-
-      const width = valid ? (endAmp - startAmp) / pxUnitAmp : 0
-      const translateX = valid ? startAmp / pxUnitAmp : 0
-      const translateY = baseTop + index * topStep
-      const { _parent } = item
-      const record = { ...item.record, disabled: this.disabled }
-      const bar: Gantt.Bar = {
-        key: item.key,
-        task: item,
-        record,
-        translateX,
-        translateY,
-        width,
-        label: item.content,
-        stepGesture: 'end', // start(开始）、moving(移动)、end(结束)
-        invalidDateRange: !item.endDate || !item.startDate, // 是否为有效时间区间
-        dateTextFormat,
-        getDateWidth,
-        loading: false,
-        _group: item.group,
-        _collapsed: item.collapsed, // 是否折叠
-        _depth: item._depth as number, // 表示子节点深度
-        _index: item._index, // 任务下标位置
-        _parent, // 原任务数据
-        _childrenCount: !item.children ? 0 : item.children.length, // 子任务
-      }
-      item._bar = bar
-      return bar
-    })
-    // 进行展开扁平
+    const barList = convertBar({ data, pxUnitAmp, rowHeight, disabled })
     return observable(barList)
   }
 
