@@ -16,7 +16,7 @@ import { HEADER_HEIGHT, TOP_PADDING } from './constants'
 import type { GanttLocale, GanttProps as GanttProperties } from './Gantt'
 import { defaultLocale } from './Gantt'
 import { Gantt } from './types'
-import { convertBar, transverseData } from './utils'
+import { convertBar, convertItem, getChildrenCount, transverseData } from './utils'
 
 dayjs.extend(weekday)
 dayjs.extend(weekOfYear)
@@ -287,6 +287,10 @@ class GanttStore {
     this.setTranslateX(translateX)
   }
 
+  @action updateBarListOrder(newOrder: Gantt.Bar[]) {
+    this.data = convertItem(newOrder)
+  }
+
   getTranslateXByDate(date: string) {
     return dayjs(date).startOf('day').valueOf() / this.pxUnitAmp
   }
@@ -343,7 +347,8 @@ class GanttStore {
 
   // 内容区滚动区域域高度
   @computed get bodyScrollHeight() {
-    let height = this.getBarList.length * this.rowHeight + TOP_PADDING
+    const totalChildrenCount = getChildrenCount(this.getBarList)
+    let height = (this.getBarList.length + totalChildrenCount) * this.rowHeight + TOP_PADDING
     if (height < this.bodyClientHeight) height = this.bodyClientHeight
 
     return height
