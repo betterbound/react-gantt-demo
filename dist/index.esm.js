@@ -1,10 +1,12 @@
 import { usePersistFn, useClickAway, useSize } from 'ahooks';
-import React, { createContext, useContext, useState, useMemo, useRef, useCallback, createRef, memo, useEffect, useImperativeHandle } from 'react';
+import React, { createContext, useContext, useState, useMemo, useRef, useCallback, createRef, memo, useEffect, Children, isValidElement, cloneElement, useImperativeHandle } from 'react';
 import { observer } from 'mobx-react-lite';
 import classNames from 'classnames';
-import { createPortal } from 'react-dom';
 import dayjs from 'dayjs';
+import { createPortal } from 'react-dom';
 import { observable, action, computed, runInAction, toJS } from 'mobx';
+import { useSensors, useSensor, PointerSensor, KeyboardSensor, DndContext, closestCenter, DragOverlay } from '@dnd-kit/core';
+import { useSortable, sortableKeyboardCoordinates, arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -141,22 +143,151 @@ function _toConsumableArray(arr) {
   return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
 }
 
+function getChildrenCount(barList) {
+  return barList.reduce(function (prev, curr) {
+    if (curr._collapsed) return prev;
+    var childrenCount = getChildrenCount(curr.children);
+    return prev + curr._childrenCount + childrenCount;
+  }, 0);
+} // MEMO: アプリ側へ渡すデータに変換する関数
+
+function convertBarList(barList, activeId, overId) {
+  var _a;
+
+  var orderedBarList = barList.map(function (bar) {
+    return {
+      id: bar.record.id,
+      depth: bar._depth
+    };
+  });
+  var parents = (_a = barList[0]._parents) === null || _a === void 0 ? void 0 : _a.map(function (parent, index) {
+    return {
+      id: parent.record.id,
+      depth: index
+    };
+  });
+  return {
+    orderedBarList: orderedBarList,
+    activeId: activeId,
+    overId: overId,
+    parents: parents
+  };
+}
+function convertItem(barList) {
+  var depth = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+  var parents = arguments.length > 2 ? arguments[2] : undefined;
+  return barList.map(function (bar) {
+    var item = {
+      key: bar.key,
+      content: bar.label,
+      startDate: bar.startDate,
+      endDate: bar.endDate,
+      record: bar.record,
+      collapsed: bar._collapsed,
+      group: bar._group,
+      _depth: bar._depth,
+      _index: depth,
+      _parent: parents && parents.length > 0 ? parents[parents.length - 1] : undefined,
+      _parents: parents || [],
+      _bar: bar,
+      children: bar.children.length > 0 ? convertItem(bar.children, bar._depth + 1, [].concat(_toConsumableArray(parents || []), [bar])) : undefined
+    };
+    return item;
+  });
+}
+function convertBar(_ref) {
+  var data = _ref.data,
+      pxUnitAmp = _ref.pxUnitAmp,
+      rowHeight = _ref.rowHeight,
+      disabled = _ref.disabled,
+      _ref$depth = _ref.depth,
+      depth = _ref$depth === void 0 ? 0 : _ref$depth,
+      _ref$parents = _ref.parents,
+      parents = _ref$parents === void 0 ? [] : _ref$parents;
+  // 最小宽度
+  var minStamp = 11 * pxUnitAmp;
+
+  var dateTextFormat = function dateTextFormat(startX) {
+    return dayjs(startX * pxUnitAmp).format('YYYY-MM-DD');
+  };
+
+  var getDateWidth = function getDateWidth(start, endX) {
+    var startDate = dayjs(start * pxUnitAmp);
+    var endDate = dayjs(endX * pxUnitAmp);
+    return "".concat(startDate.diff(endDate, 'day') + 1);
+  };
+
+  var barList = data.map(function (item) {
+    var valid = item.startDate && item.endDate;
+    var startAmp = dayjs(item.startDate || 0).startOf('day').valueOf();
+    var endAmp = dayjs(item.endDate || 0).endOf('day').valueOf(); // 訳: 開始日と終了日が同じ場合、デフォルトで1日とする
+
+    if (Math.abs(endAmp - startAmp) < minStamp) {
+      startAmp = dayjs(item.startDate || 0).startOf('day').valueOf();
+      endAmp = dayjs(item.endDate || 0).endOf('day').add(minStamp, 'millisecond').valueOf();
+    }
+
+    var width = valid ? (endAmp - startAmp) / pxUnitAmp : 0;
+    var translateX = valid ? startAmp / pxUnitAmp : 0;
+
+    var record = _objectSpread2(_objectSpread2({}, item.record), {}, {
+      disabled: disabled
+    });
+
+    var bar = {
+      key: item.key,
+      task: item,
+      record: record,
+      translateX: translateX,
+      translateY: 0,
+      width: width,
+      label: item.content,
+      stepGesture: 'end',
+      invalidDateRange: !item.endDate || !item.startDate,
+      startDate: item.startDate,
+      endDate: item.endDate,
+      dateTextFormat: dateTextFormat,
+      getDateWidth: getDateWidth,
+      loading: false,
+      children: !item.children ? [] : convertBar({
+        data: item.children,
+        pxUnitAmp: pxUnitAmp,
+        rowHeight: rowHeight,
+        disabled: disabled,
+        depth: item._depth + 1,
+        parents: [].concat(_toConsumableArray(parents || []), [item])
+      }),
+      _group: item.group,
+      _collapsed: item.collapsed,
+      _depth: depth,
+      _index: item._index,
+      _parent: parents && parents.length > 0 ? parents[parents.length - 1] : undefined,
+      _parents: parents || [],
+      _childrenCount: !item.children ? 0 : item.children.length // 訳: 子タスク
+
+    };
+    item._bar = bar;
+    return bar;
+  });
+  return barList;
+}
 /**
  * 将树形数据向下递归为一维数组
  *
  * @param {any} arr 数据源
  */
+// MEMO: ガントチャート側のデータで使用。_collapsed: true のデータは削除し、データをフラットにして position を計算している。
+
 function flattenDeep() {
   var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   var depth = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-  var parent = arguments.length > 2 ? arguments[2] : undefined;
   var index = 0;
   return array.reduce(function (flat, item) {
-    item._depth = depth;
-    item._parent = parent;
+    item._depth = depth; // item._parent = parent
+
     item._index = index;
     index += 1;
-    return [].concat(_toConsumableArray(flat), [item], _toConsumableArray(item.children && !item.collapsed ? flattenDeep(item.children, depth + 1, item) : []));
+    return [].concat(_toConsumableArray(flat), [item], _toConsumableArray(item.children && !item._collapsed ? flattenDeep(item.children, depth + 1) : []));
   }, []);
 }
 function getMaxRange(bar) {
@@ -688,7 +819,8 @@ var renderInvalidBarDefault = function renderInvalidBarDefault(element) {
 };
 
 var InvalidTaskBar = function InvalidTaskBar(_ref) {
-  var data = _ref.data;
+  var data = _ref.data,
+      translateY = _ref.translateY;
 
   var _useContext = useContext(context),
       store = _useContext.store,
@@ -697,8 +829,7 @@ var InvalidTaskBar = function InvalidTaskBar(_ref) {
       renderInvalidBar = _useContext$renderInv === void 0 ? renderInvalidBarDefault : _useContext$renderInv;
 
   var triggerRef = useRef(null);
-  var translateY = data.translateY,
-      translateX = data.translateX,
+  var translateX = data.translateX,
       width = data.width,
       dateTextFormat = data.dateTextFormat,
       record = data.record;
@@ -5061,6 +5192,11 @@ var GanttStore = /*#__PURE__*/function () {
       this.setTranslateX(translateX);
     }
   }, {
+    key: "updateBarListOrder",
+    value: function updateBarListOrder(newOrder) {
+      this.data = convertItem(newOrder);
+    }
+  }, {
     key: "getTranslateXByDate",
     value: function getTranslateXByDate(date) {
       return dayjs(date).startOf('day').valueOf() / this.pxUnitAmp;
@@ -5131,7 +5267,8 @@ var GanttStore = /*#__PURE__*/function () {
   }, {
     key: "bodyScrollHeight",
     get: function get() {
-      var height = this.getBarList.length * this.rowHeight + TOP_PADDING;
+      var totalChildrenCount = getChildrenCount(this.getBarList);
+      var height = (this.getBarList.length + totalChildrenCount) * this.rowHeight + TOP_PADDING;
       if (height < this.bodyClientHeight) height = this.bodyClientHeight;
       return height;
     } // 1px对应的毫秒数
@@ -5395,72 +5532,16 @@ var GanttStore = /*#__PURE__*/function () {
   }, {
     key: "getBarList",
     get: function get() {
-      var _this4 = this;
-
       var pxUnitAmp = this.pxUnitAmp,
-          data = this.data; // 最小宽度
-
-      var minStamp = 11 * pxUnitAmp; // TODO 去除高度读取
-
-      var height = 8;
-      var baseTop = TOP_PADDING + this.rowHeight / 2 - height / 2;
-      var topStep = this.rowHeight;
-
-      var dateTextFormat = function dateTextFormat(startX) {
-        return dayjs(startX * pxUnitAmp).format('YYYY-MM-DD');
-      };
-
-      var getDateWidth = function getDateWidth(start, endX) {
-        var startDate = dayjs(start * pxUnitAmp);
-        var endDate = dayjs(endX * pxUnitAmp);
-        return "".concat(startDate.diff(endDate, 'day') + 1);
-      };
-
-      var flattenData = flattenDeep(data);
-      var barList = flattenData.map(function (item, index) {
-        var valid = item.startDate && item.endDate;
-        var startAmp = dayjs(item.startDate || 0).startOf('day').valueOf();
-        var endAmp = dayjs(item.endDate || 0).endOf('day').valueOf(); // 开始结束日期相同默认一天
-
-        if (Math.abs(endAmp - startAmp) < minStamp) {
-          startAmp = dayjs(item.startDate || 0).startOf('day').valueOf();
-          endAmp = dayjs(item.endDate || 0).endOf('day').add(minStamp, 'millisecond').valueOf();
-        }
-
-        var width = valid ? (endAmp - startAmp) / pxUnitAmp : 0;
-        var translateX = valid ? startAmp / pxUnitAmp : 0;
-        var translateY = baseTop + index * topStep;
-        var _parent = item._parent;
-
-        var record = _objectSpread2(_objectSpread2({}, item.record), {}, {
-          disabled: _this4.disabled
-        });
-
-        var bar = {
-          key: item.key,
-          task: item,
-          record: record,
-          translateX: translateX,
-          translateY: translateY,
-          width: width,
-          label: item.content,
-          stepGesture: 'end',
-          invalidDateRange: !item.endDate || !item.startDate,
-          dateTextFormat: dateTextFormat,
-          getDateWidth: getDateWidth,
-          loading: false,
-          _group: item.group,
-          _collapsed: item.collapsed,
-          _depth: item._depth,
-          _index: item._index,
-          _parent: _parent,
-          _childrenCount: !item.children ? 0 : item.children.length // 子任务
-
-        };
-        item._bar = bar;
-        return bar;
-      }); // 进行展开扁平
-
+          data = this.data,
+          rowHeight = this.rowHeight,
+          disabled = this.disabled;
+      var barList = convertBar({
+        data: data,
+        pxUnitAmp: pxUnitAmp,
+        rowHeight: rowHeight,
+        disabled: disabled
+      });
       return observable(barList);
     } // 虚拟滚动
 
@@ -5720,6 +5801,8 @@ __decorate([action], GanttStore.prototype, "switchSight", null);
 
 __decorate([action], GanttStore.prototype, "scrollToToday", null);
 
+__decorate([action], GanttStore.prototype, "updateBarListOrder", null);
+
 __decorate([computed], GanttStore.prototype, "todayTranslateX", null);
 
 __decorate([computed], GanttStore.prototype, "scrollBarWidth", null);
@@ -5802,7 +5885,8 @@ var RenderBar = function RenderBar(_ref) {
 var TaskBar = function TaskBar(_ref2) {
   var _classNames;
 
-  var data = _ref2.data;
+  var data = _ref2.data,
+      translateY = _ref2.translateY;
 
   var _useContext2 = useContext(context),
       store = _useContext2.store,
@@ -5818,7 +5902,6 @@ var TaskBar = function TaskBar(_ref2) {
 
   var width = data.width,
       translateX = data.translateX,
-      translateY = data.translateY,
       invalidDateRange = data.invalidDateRange,
       stepGesture = data.stepGesture,
       dateTextFormat = data.dateTextFormat,
@@ -5987,14 +6070,14 @@ styleInject(css_248z$f);
 
 var TaskBarItems = function TaskBarItems(_ref) {
   var data = _ref.data,
-      barItem = _ref.barItem;
+      barItem = _ref.barItem,
+      translateY = _ref.translateY;
 
   var _useContext = useContext(context),
       store = _useContext.store,
       prefixCls = _useContext.prefixCls;
 
-  var loading = data.loading,
-      translateY = data.translateY;
+  var loading = data.loading;
   var prefixClsTaskBar = "".concat(prefixCls, "-task-bar");
   var valid = barItem.startDate && barItem.endDate;
   var startAmp = dayjs(barItem.startDate || 0).startOf('day').valueOf();
@@ -6014,20 +6097,26 @@ var TaskBarItems = function TaskBarItems(_ref) {
 
 var TaskBarItems$1 = observer(TaskBarItems);
 
-/* eslint-disable no-underscore-dangle */
-
 var BarList = function BarList() {
   var _useContext = useContext(context),
       store = _useContext.store,
       allowAddBar = _useContext.allowAddBar;
 
   var barList = store.getBarList;
-  var _store$getVisibleRows = store.getVisibleRows,
-      count = _store$getVisibleRows.count,
-      start = _store$getVisibleRows.start;
+  var rowHeight = store.rowHeight;
+  var flattenBarList = flattenDeep(barList); // TODO 去除高度读取
+
+  var height = 8;
+  var baseTop = TOP_PADDING + rowHeight / 2 - height / 2;
+  var topStep = rowHeight;
   return /*#__PURE__*/React.createElement("div", {
     "data-bar": 'BarList'
-  }, barList.slice(start, start + count).map(function (bar) {
+  }, flattenBarList.map(function (bar, index) {
+    var translateY = baseTop + index * topStep;
+    var commonProps = {
+      data: bar,
+      translateY: translateY
+    };
     if (bar._group) return /*#__PURE__*/React.createElement(GroupBar$1, {
       key: bar.key,
       data: bar
@@ -6041,23 +6130,19 @@ var BarList = function BarList() {
             display: 'flex',
             flexDirection: 'column'
           }
-        }, /*#__PURE__*/React.createElement(TaskBar$1, {
-          key: bar.key,
-          data: bar
-        }), /*#__PURE__*/React.createElement(TaskBarItems$1, {
+        }, /*#__PURE__*/React.createElement(TaskBar$1, _objectSpread2({}, commonProps)), /*#__PURE__*/React.createElement(TaskBarItems$1, {
           data: bar,
-          barItem: barItem
+          barItem: barItem,
+          translateY: translateY
         }));
       });
     }
 
-    return bar.invalidDateRange && allowAddBar ? /*#__PURE__*/React.createElement(InvalidTaskBar$1, {
-      key: bar.key,
-      data: bar
-    }) : /*#__PURE__*/React.createElement(TaskBar$1, {
-      key: bar.key,
-      data: bar
-    });
+    return bar.invalidDateRange && allowAddBar ? /*#__PURE__*/React.createElement(InvalidTaskBar$1, _objectSpread2({
+      key: bar.key
+    }, commonProps)) : /*#__PURE__*/React.createElement(TaskBar$1, _objectSpread2({
+      key: bar.key
+    }, commonProps));
   }));
 };
 
@@ -6128,10 +6213,7 @@ var BarThumbList = function BarThumbList() {
       store = _useContext.store;
 
   var barList = store.getBarList;
-  var _store$getVisibleRows = store.getVisibleRows,
-      count = _store$getVisibleRows.count,
-      start = _store$getVisibleRows.start;
-  return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar) {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, barList.map(function (bar) {
     if (store.getTaskBarThumbVisible(bar)) return /*#__PURE__*/React.createElement(TaskBarThumb$1, {
       data: bar,
       key: bar.key
@@ -6670,6 +6752,38 @@ var SelectionIndicator = function SelectionIndicator() {
 
 var SelectionIndicator$1 = observer(SelectionIndicator);
 
+var DraggableBlock = function DraggableBlock(_ref) {
+  var id = _ref.id,
+      children = _ref.children;
+
+  var _useSortable = useSortable({
+    id: id
+  }),
+      attributes = _useSortable.attributes,
+      listeners = _useSortable.listeners,
+      isDragging = _useSortable.isDragging,
+      transform = _useSortable.transform,
+      transition = _useSortable.transition,
+      setNodeRef = _useSortable.setNodeRef,
+      setActivatorNodeRef = _useSortable.setActivatorNodeRef;
+
+  var child = Children.only(children);
+  var newProps = {
+    setActivatorNodeRef: setActivatorNodeRef,
+    listeners: listeners,
+    isDragging: isDragging,
+    transform: transform,
+    transition: transition
+  };
+  return /*#__PURE__*/React.createElement("div", _objectSpread2(_objectSpread2({
+    ref: setNodeRef
+  }, attributes), {}, {
+    className: 'gantt-table-body-row-wrap'
+  }), /*#__PURE__*/isValidElement(child) && /*#__PURE__*/cloneElement(child, _objectSpread2({}, newProps)));
+};
+
+var DraggableBlock$1 = /*#__PURE__*/React.memo(DraggableBlock);
+
 var css_248z$6 = ".gantt-row-toggler {\n  width: 24px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: #d9d9d9;\n  cursor: pointer;\n  position: relative;\n  z-index: 5;\n}\n.gantt-row-toggler:hover {\n  color: #8c8c8c;\n}\n.gantt-row-toggler > i {\n  width: 20px;\n  height: 20px;\n  background: white;\n}\n.gantt-row-toggler > i > svg {\n  transition: transform 218ms;\n  fill: currentColor;\n}\n.gantt-row-toggler-collapsed > i > svg {\n  transform: rotate(-90deg);\n}\n";
 styleInject(css_248z$6);
 
@@ -6699,10 +6813,50 @@ var RowToggler = function RowToggler(_ref) {
   })))));
 };
 
-var css_248z$5 = ".gantt-table-body {\n  position: absolute;\n  top: 0;\n  left: 0;\n  overflow: hidden;\n}\n.gantt-table-body-row,\n.gantt-table-body-border_row {\n  display: flex;\n  align-items: center;\n  position: absolute;\n  width: 100%;\n}\n.gantt-table-body-border_row {\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-table-body-cell {\n  position: relative;\n  display: flex;\n  align-items: center;\n  border-right: 1px solid #f0f0f0;\n  height: 100%;\n  color: #2e405e;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  padding: 0 8px;\n  font-size: 14px;\n}\n.gantt-table-body-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.gantt-table-body-row-indentation {\n  height: 100%;\n  position: absolute;\n  left: 0;\n  pointer-events: none;\n}\n.gantt-table-body-row-indentation:before {\n  content: '';\n  position: absolute;\n  height: 100%;\n  left: 0;\n  width: 1px;\n  bottom: 0;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-both:after {\n  content: '';\n  position: absolute;\n  width: 100%;\n  bottom: 0;\n  left: 0;\n  height: 1px;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-hidden {\n  visibility: hidden;\n}\n";
-styleInject(css_248z$5);
+var ExpandIcon = observer(function (_ref) {
+  var bar = _ref.bar,
+      onExpand = _ref.onExpand,
+      store = _ref.store,
+      expandIcon = _ref.expandIcon,
+      prefixCls = _ref.prefixCls,
+      tableIndent = _ref.tableIndent;
 
-var TableRows = function TableRows() {
+  var handleClick = function handleClick(event) {
+    event.stopPropagation();
+    if (onExpand) onExpand(bar.task.record, !bar._collapsed);
+    store.setRowCollapse(bar.task, !bar._collapsed);
+  };
+
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'absolute',
+      left: tableIndent * bar._depth + 15,
+      background: 'white',
+      zIndex: 9,
+      transform: 'translateX(-52%)',
+      padding: 1
+    }
+  }, expandIcon ? expandIcon({
+    level: bar._depth,
+    collapsed: bar._collapsed,
+    onClick: handleClick
+  }) : /*#__PURE__*/React.createElement(RowToggler, {
+    prefixCls: prefixCls,
+    level: bar._depth,
+    collapsed: bar._collapsed,
+    onClick: handleClick
+  }));
+});
+
+var DraggableBlockItem = function DraggableBlockItem(_ref2) {
+  var bar = _ref2.bar,
+      isLastChild = _ref2.isLastChild,
+      isActive = _ref2.isActive,
+      listeners = _ref2.listeners,
+      transform = _ref2.transform,
+      transition = _ref2.transition,
+      setActivatorNodeRef = _ref2.setActivatorNodeRef;
+
   var _useContext = useContext(context),
       store = _useContext.store,
       onRow = _useContext.onRow,
@@ -6711,14 +6865,166 @@ var TableRows = function TableRows() {
       prefixCls = _useContext.prefixCls,
       onExpand = _useContext.onExpand;
 
+  var prefixClsTableBody = "".concat(prefixCls, "-table-body");
   var columns = store.columns,
       rowHeight = store.rowHeight;
   var columnsWidth = store.getColumnsWidth;
-  var barList = store.getBarList;
-  var _store$getVisibleRows = store.getVisibleRows,
-      count = _store$getVisibleRows.count,
-      start = _store$getVisibleRows.start;
-  var prefixClsTableBody = "".concat(prefixCls, "-table-body");
+  var style = {
+    opacity: isActive ? 0.5 : 1,
+    boxShadow: isActive ? '0 4px 8px rgba(0, 0, 0, 0.1)' : undefined,
+    transform: transform ? "translate3d(".concat(transform.x, "px, ").concat(transform.y, "px, 0)") : undefined,
+    transition: transition
+  };
+  if (!(bar === null || bar === void 0 ? void 0 : bar.record)) return null;
+  return /*#__PURE__*/React.createElement("div", {
+    ref: setActivatorNodeRef,
+    style: style
+  }, /*#__PURE__*/React.createElement("div", {
+    role: 'none',
+    className: classNames("".concat(prefixClsTableBody, "-row"), bar.record.className),
+    onClick: function onClick() {
+      onRow === null || onRow === void 0 ? void 0 : onRow.onClick(bar.record);
+    }
+  }, /*#__PURE__*/React.createElement("button", _objectSpread2(_objectSpread2({
+    type: 'button'
+  }, listeners), {}, {
+    style: {
+      cursor: isActive ? 'grabbing' : 'grab',
+      pointerEvents: 'auto',
+      touchAction: 'none'
+    }
+  }), " D "), columns.map(function (column, index) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: column.name,
+      className: "".concat(prefixClsTableBody, "-cell"),
+      style: _objectSpread2({
+        width: columnsWidth[index],
+        height: rowHeight,
+        minWidth: column.minWidth,
+        maxWidth: column.maxWidth,
+        textAlign: column.align ? column.align : 'left',
+        paddingLeft: index === 0 && tableIndent * (bar._depth + 1) + 10
+      }, column.style)
+    }, index === 0 && // eslint-disable-next-line unicorn/no-new-array
+    new Array(bar._depth).fill(0).map(function (_, i) {
+      var _classNames;
+
+      return /*#__PURE__*/React.createElement("div", {
+        // eslint-disable-next-line react/no-array-index-key
+        key: i,
+        className: classNames("".concat(prefixClsTableBody, "-row-indentation"), (_classNames = {}, _defineProperty(_classNames, "".concat(prefixClsTableBody, "-row-indentation-hidden"), isLastChild && i === bar._depth - 2), _defineProperty(_classNames, "".concat(prefixClsTableBody, "-row-indentation-both"), i === bar._depth - 1), _classNames)),
+        style: {
+          top: -(rowHeight / 2) + 1,
+          left: tableIndent * i + 15,
+          width: tableIndent * 1.5 + 5
+        }
+      });
+    }), index === 0 && bar._childrenCount > 0 && /*#__PURE__*/React.createElement(ExpandIcon, {
+      bar: bar,
+      onExpand: onExpand,
+      store: store,
+      expandIcon: expandIcon,
+      prefixCls: prefixCls,
+      tableIndent: tableIndent
+    }), /*#__PURE__*/React.createElement("span", {
+      className: "".concat(prefixClsTableBody, "-ellipsis")
+    }, column.render ? column.render(bar.record) : bar.record[column.name]));
+  })), !bar._collapsed && bar.children && bar.children.length > 0 && /*#__PURE__*/React.createElement(ObserverTableRows$1, {
+    barList: bar.children
+  }));
+};
+
+var DraggableBlockItem$1 = /*#__PURE__*/React.memo(DraggableBlockItem);
+
+var ObserverTableRow = function ObserverTableRow(_ref) {
+  var bar = _ref.bar,
+      isLastChild = _ref.isLastChild,
+      _ref$isActive = _ref.isActive,
+      isActive = _ref$isActive === void 0 ? false : _ref$isActive;
+  return /*#__PURE__*/React.createElement(DraggableBlock$1, {
+    id: bar.record.id
+  }, /*#__PURE__*/React.createElement(DraggableBlockItem$1, {
+    bar: bar,
+    isLastChild: isLastChild,
+    isActive: isActive
+  }));
+};
+
+var ObserverTableRow$1 = /*#__PURE__*/React.memo(ObserverTableRow);
+
+var updateBarListRecursively = function updateBarListRecursively(originalList, newOrder, newOrderKeys) {
+  var updatedList = [];
+
+  var remainingBars = _toConsumableArray(originalList);
+
+  newOrder.forEach(function (newBar) {
+    var index = remainingBars.findIndex(function (bar) {
+      return bar.key === newBar.key;
+    });
+
+    if (index !== -1) {
+      var _remainingBars$splice = remainingBars.splice(index, 1),
+          _remainingBars$splice2 = _slicedToArray(_remainingBars$splice, 1),
+          bar = _remainingBars$splice2[0];
+
+      updatedList.push(_objectSpread2(_objectSpread2({}, newBar), {}, {
+        children: updateBarListRecursively(bar.children, newOrder)
+      }));
+    }
+  });
+  remainingBars.forEach(function (bar) {
+    updatedList.push(_objectSpread2(_objectSpread2({}, bar), {}, {
+      children: updateBarListRecursively(bar.children, newOrder)
+    }));
+  });
+  return updatedList;
+};
+
+var ObserverTableRows = function ObserverTableRows(_ref) {
+  var barList = _ref.barList;
+
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      orderedBarList = _useContext.orderedBarList;
+
+  var _useState = useState(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      activeId = _useState2[0],
+      setActiveId = _useState2[1];
+
+  var originalBarList = store.getBarList;
+  var sensors = useSensors(useSensor(PointerSensor), useSensor(KeyboardSensor, {
+    coordinateGetter: sortableKeyboardCoordinates
+  }));
+  var handleDragEnd = useCallback(function (event) {
+    var active = event.active,
+        over = event.over;
+
+    if (!active || !over) {
+      console.warn('Drag ended with incomplete data:', {
+        active: active,
+        over: over
+      });
+      return;
+    }
+
+    var oldIndex = barList.findIndex(function (item) {
+      return item.record.id === active.id;
+    });
+    var newIndex = barList.findIndex(function (item) {
+      return item.record.id === over.id;
+    });
+
+    if (active.id !== over.id) {
+      var newOrder = arrayMove(barList, oldIndex, newIndex);
+      newOrder.map(function (order) {
+        return order.record.id;
+      });
+      var updatedBarList = updateBarListRecursively(originalBarList, newOrder);
+      store.updateBarListOrder(updatedBarList);
+      orderedBarList === null || orderedBarList === void 0 ? void 0 : orderedBarList(convertBarList(newOrder, active.id, over.id));
+    }
+  }, [barList, originalBarList, store, orderedBarList]);
 
   if (barList.length === 0) {
     return /*#__PURE__*/React.createElement("div", {
@@ -6731,87 +7037,48 @@ var TableRows = function TableRows() {
     }, "\u8A72\u5F53\u3059\u308B\u30C7\u30FC\u30BF\u304C\u3042\u308A\u307E\u305B\u3093");
   }
 
-  return /*#__PURE__*/React.createElement(React.Fragment, null, barList.slice(start, start + count).map(function (bar, rowIndex) {
+  return /*#__PURE__*/React.createElement(DndContext, {
+    sensors: sensors,
+    collisionDetection: closestCenter,
+    onDragStart: function onDragStart(event) {
+      return setActiveId(event.active.id);
+    },
+    onDragEnd: handleDragEnd
+  }, /*#__PURE__*/React.createElement(SortableContext, {
+    items: barList.map(function (bar) {
+      return bar.record.id;
+    }),
+    strategy: verticalListSortingStrategy
+  }, barList.map(function (bar) {
     // 父元素如果是其最后一个祖先的子，要隐藏上一层的线
     var parent = bar._parent;
     var parentItem = parent === null || parent === void 0 ? void 0 : parent._parent;
     var isLastChild = false;
     if ((parentItem === null || parentItem === void 0 ? void 0 : parentItem.children) && parentItem.children[parentItem.children.length - 1] === bar._parent) isLastChild = true;
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/React.createElement(ObserverTableRow$1, {
       key: bar.key,
-      role: 'none',
-      className: "".concat(prefixClsTableBody, "-row ").concat(bar.record.className),
-      style: {
-        height: rowHeight,
-        top: (rowIndex + start) * rowHeight + TOP_PADDING
-      },
-      onClick: function onClick() {
-        onRow === null || onRow === void 0 ? void 0 : onRow.onClick(bar.record);
-      }
-    }, columns.map(function (column, index) {
-      return /*#__PURE__*/React.createElement("div", {
-        key: column.name,
-        className: "".concat(prefixClsTableBody, "-cell"),
-        style: _objectSpread2({
-          width: columnsWidth[index],
-          minWidth: column.minWidth,
-          maxWidth: column.maxWidth,
-          textAlign: column.align ? column.align : 'left',
-          paddingLeft: index === 0 && tableIndent * (bar._depth + 1) + 10
-        }, column.style)
-      }, index === 0 && // eslint-disable-next-line unicorn/no-new-array
-      new Array(bar._depth).fill(0).map(function (_, i) {
-        var _classNames;
-
-        return /*#__PURE__*/React.createElement("div", {
-          // eslint-disable-next-line react/no-array-index-key
-          key: i,
-          className: classNames("".concat(prefixClsTableBody, "-row-indentation"), (_classNames = {}, _defineProperty(_classNames, "".concat(prefixClsTableBody, "-row-indentation-hidden"), isLastChild && i === bar._depth - 2), _defineProperty(_classNames, "".concat(prefixClsTableBody, "-row-indentation-both"), i === bar._depth - 1), _classNames)),
-          style: {
-            top: -(rowHeight / 2) + 1,
-            left: tableIndent * i + 15,
-            width: tableIndent * 1.5 + 5
-          }
-        });
-      }), index === 0 && bar._childrenCount > 0 && /*#__PURE__*/React.createElement("div", {
-        style: {
-          position: 'absolute',
-          left: tableIndent * bar._depth + 15,
-          background: 'white',
-          zIndex: 9,
-          transform: 'translateX(-52%)',
-          padding: 1
-        }
-      }, expandIcon ? expandIcon({
-        level: bar._depth,
-        collapsed: bar._collapsed,
-        onClick: function onClick(event) {
-          event.stopPropagation();
-          if (onExpand) onExpand(bar.task.record, !bar._collapsed);
-          store.setRowCollapse(bar.task, !bar._collapsed);
-        }
-      }) : /*#__PURE__*/React.createElement(RowToggler, {
-        prefixCls: prefixCls,
-        level: bar._depth,
-        collapsed: bar._collapsed,
-        onClick: function onClick(event) {
-          event.stopPropagation();
-          if (onExpand) onExpand(bar.task.record, !bar._collapsed);
-          store.setRowCollapse(bar.task, !bar._collapsed);
-        }
-      })), /*#__PURE__*/React.createElement("span", {
-        className: "".concat(prefixClsTableBody, "-ellipsis")
-      }, column.render ? column.render(bar.record) : bar.record[column.name]));
-    }));
-  }));
+      bar: bar,
+      isLastChild: isLastChild
+    });
+  }), /*#__PURE__*/React.createElement(DragOverlay, null, activeId ? /*#__PURE__*/React.createElement(ObserverTableRow$1, {
+    key: activeId,
+    bar: barList.find(function (bar) {
+      return bar.record.id === activeId;
+    }),
+    isLastChild: false,
+    isActive: true
+  }) : null)));
 };
 
-var ObserverTableRows = observer(TableRows);
+var ObserverTableRows$1 = observer(ObserverTableRows);
+
+var css_248z$5 = ".gantt-table-body {\n  overflow: hidden;\n}\n.gantt-table-body-row,\n.gantt-table-body-border_row {\n  display: flex;\n  align-items: center;\n}\n.gantt-table-body-border_row {\n  height: 100%;\n  pointer-events: none;\n}\n.gantt-table-body-cell {\n  position: relative;\n  display: flex;\n  align-items: center;\n  border-right: 1px solid #f0f0f0;\n  height: 100%;\n  color: #2e405e;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  padding: 0 8px;\n  font-size: 14px;\n}\n.gantt-table-body-ellipsis {\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.gantt-table-body-row-indentation {\n  height: 100%;\n  position: absolute;\n  left: 0;\n  pointer-events: none;\n}\n.gantt-table-body-row-indentation:before {\n  content: '';\n  position: absolute;\n  height: 100%;\n  left: 0;\n  width: 1px;\n  bottom: 0;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-both:after {\n  content: '';\n  position: absolute;\n  width: 100%;\n  bottom: 0;\n  left: 0;\n  height: 1px;\n  background-color: #d9e6f2;\n}\n.gantt-table-body-row-indentation-hidden {\n  visibility: hidden;\n}\n";
+styleInject(css_248z$5);
 
 var TableBorders = function TableBorders() {
-  var _useContext2 = useContext(context),
-      store = _useContext2.store,
-      prefixCls = _useContext2.prefixCls;
+  var _useContext = useContext(context),
+      store = _useContext.store,
+      prefixCls = _useContext.prefixCls;
 
   var columns = store.columns;
   var columnsWidth = store.getColumnsWidth;
@@ -6838,9 +7105,14 @@ var TableBorders = function TableBorders() {
 var ObserverTableBorders = observer(TableBorders);
 
 var TableBody = function TableBody() {
-  var _useContext3 = useContext(context),
-      store = _useContext3.store,
-      prefixCls = _useContext3.prefixCls;
+  var _useContext2 = useContext(context),
+      store = _useContext2.store,
+      prefixCls = _useContext2.prefixCls;
+
+  var _useState = useState(store.getBarList),
+      _useState2 = _slicedToArray(_useState, 2),
+      barList = _useState2[0],
+      setBarList = _useState2[1];
 
   var handleMouseMove = useCallback(function (event) {
     event.persist();
@@ -6850,15 +7122,26 @@ var TableBody = function TableBody() {
     store.handleMouseLeave();
   }, [store]);
   var prefixClsTableBody = "".concat(prefixCls, "-table-body");
+  useEffect(function () {
+    setBarList(store.getBarList);
+  }, [store.getBarList]);
   return /*#__PURE__*/React.createElement("div", {
     className: prefixClsTableBody,
     style: {
-      width: store.tableWidth,
-      height: store.bodyScrollHeight
+      width: store.tableWidth
     },
     onMouseMove: handleMouseMove,
     onMouseLeave: handleMouseLeave
-  }, /*#__PURE__*/React.createElement(ObserverTableBorders, null), /*#__PURE__*/React.createElement(ObserverTableRows, null));
+  }, /*#__PURE__*/React.createElement(ObserverTableBorders, null), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%'
+    }
+  }, /*#__PURE__*/React.createElement(ObserverTableRows$1, {
+    barList: barList
+  })));
 };
 
 var TableBody$1 = observer(TableBody);
@@ -7248,6 +7531,7 @@ var GanttComponent = function GanttComponent(props) {
       renderDaysText = props.renderDaysText,
       onExpand = props.onExpand,
       onTimeAxisClick = props.onTimeAxisClick,
+      orderedBarList = props.orderedBarList,
       _props$showChangeBarS = props.showChangeBarSize,
       showChangeBarSize = _props$showChangeBarS === void 0 ? true : _props$showChangeBarS,
       _props$canMoveBar = props.canMoveBar,
@@ -7324,6 +7608,7 @@ var GanttComponent = function GanttComponent(props) {
       renderDaysText: renderDaysText,
       onExpand: onExpand,
       onTimeAxisClick: onTimeAxisClick,
+      orderedBarList: orderedBarList,
       showChangeBarSize: showChangeBarSize,
       canMoveBar: canMoveBar,
       timeAxisMinorStyle: timeAxisMinorStyle,
@@ -7331,7 +7616,7 @@ var GanttComponent = function GanttComponent(props) {
       hideTable: hideTable,
       tableSize: tableSize
     };
-  }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, renderDaysText, onExpand, onTimeAxisClick, showChangeBarSize, canMoveBar, timeAxisMinorStyle, allowAddBar, hideTable, tableSize]);
+  }, [store, getBarColor, showBackToday, showUnitSwitch, onRow, tableIndent, expandIcon, renderBar, renderInvalidBar, renderGroupBar, onBarClick, tableCollapseAble, renderBarThumb, scrollTop, alwaysShowTaskBar, renderLeftText, renderRightText, renderDaysText, onExpand, onTimeAxisClick, orderedBarList, showChangeBarSize, canMoveBar, timeAxisMinorStyle, allowAddBar, hideTable, tableSize]);
   return /*#__PURE__*/React.createElement(context.Provider, {
     value: ContextValue
   }, /*#__PURE__*/React.createElement(Body, null, /*#__PURE__*/React.createElement("header", null, !hideTable && /*#__PURE__*/React.createElement(TableHeader$1, null), /*#__PURE__*/React.createElement(TimeAxis$1, null)), /*#__PURE__*/React.createElement("main", {
