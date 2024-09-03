@@ -1,9 +1,8 @@
-import React from 'react';
 import type { DraggableSyntheticListeners } from '@dnd-kit/core';
+import React from 'react';
 import type { Gantt } from '../../types';
 interface DraggableBlockItemProps {
     bar: Gantt.Bar;
-    isLastChild: boolean;
     isActive?: boolean;
     listeners?: DraggableSyntheticListeners;
     transform?: {
@@ -13,5 +12,5 @@ interface DraggableBlockItemProps {
     transition?: string;
     setActivatorNodeRef?: (element: HTMLElement | null) => void;
 }
-declare const _default: React.MemoExoticComponent<({ bar, isLastChild, isActive, listeners, transform, transition, setActivatorNodeRef }: DraggableBlockItemProps) => JSX.Element>;
+declare const _default: React.FunctionComponent<DraggableBlockItemProps>;
 export default _default;

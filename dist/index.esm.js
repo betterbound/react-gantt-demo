@@ -6819,8 +6819,7 @@ var ExpandIcon = observer(function (_ref) {
       onExpand = _ref.onExpand,
       store = _ref.store,
       expandIcon = _ref.expandIcon,
-      prefixCls = _ref.prefixCls,
-      tableIndent = _ref.tableIndent;
+      prefixCls = _ref.prefixCls;
 
   var handleClick = function handleClick(event) {
     event.stopPropagation();
@@ -6828,16 +6827,7 @@ var ExpandIcon = observer(function (_ref) {
     store.setRowCollapse(bar.task, !bar._collapsed);
   };
 
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'absolute',
-      left: tableIndent * bar._depth + 15,
-      background: 'white',
-      zIndex: 9,
-      transform: 'translateX(-52%)',
-      padding: 1
-    }
-  }, expandIcon ? expandIcon({
+  return /*#__PURE__*/React.createElement("div", null, expandIcon ? expandIcon({
     level: bar._depth,
     collapsed: bar._collapsed,
     onClick: handleClick
@@ -6851,7 +6841,6 @@ var ExpandIcon = observer(function (_ref) {
 
 var DraggableBlockItem = function DraggableBlockItem(_ref2) {
   var bar = _ref2.bar,
-      isLastChild = _ref2.isLastChild,
       isActive = _ref2.isActive,
       listeners = _ref2.listeners,
       transform = _ref2.transform,
@@ -6886,15 +6875,7 @@ var DraggableBlockItem = function DraggableBlockItem(_ref2) {
     onClick: function onClick() {
       onRow === null || onRow === void 0 ? void 0 : onRow.onClick(bar.record);
     }
-  }, /*#__PURE__*/React.createElement("button", _objectSpread2(_objectSpread2({
-    type: 'button'
-  }, listeners), {}, {
-    style: {
-      cursor: isActive ? 'grabbing' : 'grab',
-      pointerEvents: 'auto',
-      touchAction: 'none'
-    }
-  }), " D "), columns.map(function (column, index) {
+  }, columns.map(function (column, index) {
     return /*#__PURE__*/React.createElement("div", {
       key: column.name,
       className: "".concat(prefixClsTableBody, "-cell"),
@@ -6906,28 +6887,21 @@ var DraggableBlockItem = function DraggableBlockItem(_ref2) {
         textAlign: column.align ? column.align : 'left',
         paddingLeft: index === 0 && tableIndent * (bar._depth + 1) + 10
       }, column.style)
-    }, index === 0 && // eslint-disable-next-line unicorn/no-new-array
-    new Array(bar._depth).fill(0).map(function (_, i) {
-      var _classNames;
-
-      return /*#__PURE__*/React.createElement("div", {
-        // eslint-disable-next-line react/no-array-index-key
-        key: i,
-        className: classNames("".concat(prefixClsTableBody, "-row-indentation"), (_classNames = {}, _defineProperty(_classNames, "".concat(prefixClsTableBody, "-row-indentation-hidden"), isLastChild && i === bar._depth - 2), _defineProperty(_classNames, "".concat(prefixClsTableBody, "-row-indentation-both"), i === bar._depth - 1), _classNames)),
-        style: {
-          top: -(rowHeight / 2) + 1,
-          left: tableIndent * i + 15,
-          width: tableIndent * 1.5 + 5
-        }
-      });
-    }), index === 0 && bar._childrenCount > 0 && /*#__PURE__*/React.createElement(ExpandIcon, {
+    }, column.name === 'dragButton' && /*#__PURE__*/React.createElement("button", _objectSpread2(_objectSpread2({
+      type: 'button'
+    }, listeners), {}, {
+      style: {
+        cursor: isActive ? 'grabbing' : 'grab',
+        pointerEvents: 'auto',
+        touchAction: 'none'
+      }
+    }), column.render ? column.render(bar.record) : 'drag'), index === 0 && bar._childrenCount > 0 && /*#__PURE__*/React.createElement(ExpandIcon, {
       bar: bar,
       onExpand: onExpand,
       store: store,
       expandIcon: expandIcon,
-      prefixCls: prefixCls,
-      tableIndent: tableIndent
-    }), /*#__PURE__*/React.createElement("span", {
+      prefixCls: prefixCls
+    }), column.name !== 'dragButton' && /*#__PURE__*/React.createElement("span", {
       className: "".concat(prefixClsTableBody, "-ellipsis")
     }, column.render ? column.render(bar.record) : bar.record[column.name]));
   })), !bar._collapsed && bar.children && bar.children.length > 0 && /*#__PURE__*/React.createElement(ObserverTableRows$1, {
@@ -6935,18 +6909,16 @@ var DraggableBlockItem = function DraggableBlockItem(_ref2) {
   }));
 };
 
-var DraggableBlockItem$1 = /*#__PURE__*/React.memo(DraggableBlockItem);
+var DraggableBlockItem$1 = observer(DraggableBlockItem);
 
 var ObserverTableRow = function ObserverTableRow(_ref) {
   var bar = _ref.bar,
-      isLastChild = _ref.isLastChild,
       _ref$isActive = _ref.isActive,
       isActive = _ref$isActive === void 0 ? false : _ref$isActive;
   return /*#__PURE__*/React.createElement(DraggableBlock$1, {
     id: bar.record.id
   }, /*#__PURE__*/React.createElement(DraggableBlockItem$1, {
     bar: bar,
-    isLastChild: isLastChild,
     isActive: isActive
   }));
 };
@@ -7051,22 +7023,15 @@ var ObserverTableRows = function ObserverTableRows(_ref) {
     }),
     strategy: verticalListSortingStrategy
   }, barList.map(function (bar) {
-    // 父元素如果是其最后一个祖先的子，要隐藏上一层的线
-    var parent = bar._parent;
-    var parentItem = parent === null || parent === void 0 ? void 0 : parent._parent;
-    var isLastChild = false;
-    if ((parentItem === null || parentItem === void 0 ? void 0 : parentItem.children) && parentItem.children[parentItem.children.length - 1] === bar._parent) isLastChild = true;
     return /*#__PURE__*/React.createElement(ObserverTableRow$1, {
       key: bar.key,
-      bar: bar,
-      isLastChild: isLastChild
+      bar: bar
     });
   }), /*#__PURE__*/React.createElement(DragOverlay, null, activeId ? /*#__PURE__*/React.createElement(ObserverTableRow$1, {
     key: activeId,
     bar: barList.find(function (bar) {
       return bar.record.id === activeId;
     }),
-    isLastChild: false,
     isActive: true
   }) : null)));
 };
