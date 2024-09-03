@@ -101,7 +101,7 @@ export namespace Gantt {
     name: string
     label: string | React.ReactNode
     style?: Object
-    render?: (item: Record<RecordType>) => React.ReactNode
+    render?: (item: Record<RecordType>) => React.ReactNode | null
     align?: ColumnAlign
   }
   export type DependenceType = 'start_finish' | 'finish_start' | 'start_start' | 'finish_finish'

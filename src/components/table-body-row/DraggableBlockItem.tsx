@@ -95,7 +95,7 @@ const DraggableBlockItem = ({
               ...column.style,
             }}
           >
-            {column.name === 'dragButton' && column.render(bar.record) !== null &&(
+            {column.name === 'dragButton' && column.render && column.render(bar.record) != null && (
               <button
                 type='button'
                 {...listeners}
@@ -105,7 +105,7 @@ const DraggableBlockItem = ({
                   touchAction: 'none',
                 }}
               >
-                {column.render ? column.render(bar.record) : 'drag'}
+                {column.render(bar.record)}
               </button>
             )}
             {index === 0 && bar._childrenCount > 0 && (
