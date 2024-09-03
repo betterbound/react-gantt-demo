@@ -103,18 +103,10 @@ const ObserverTableRows = ({ barList }: Props) => {
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={(event) => setActiveId(event.active.id)} onDragEnd={handleDragEnd}>
       <SortableContext items={barList.map(bar => bar.record.id)} strategy={verticalListSortingStrategy}>
-        {barList.map((bar) => {
-        // 父元素如果是其最后一个祖先的子，要隐藏上一层的线
-          const parent = bar._parent
-          const parentItem = parent?._parent
-          let isLastChild = false
-          if (parentItem?.children && parentItem.children[parentItem.children.length - 1] === bar._parent)
-            isLastChild = true
-          return (<ObserverTableRow key={bar.key} bar={bar} isLastChild={isLastChild} />)
-        })}
+        {barList.map((bar) => <ObserverTableRow key={bar.key} bar={bar} />)}
         <DragOverlay>
           {activeId ? (
-            <ObserverTableRow key={activeId} bar={barList.find((bar) => bar.record.id === activeId)} isLastChild={false} isActive/>
+            <ObserverTableRow key={activeId} bar={barList.find((bar) => bar.record.id === activeId)} isActive/>
           ) : null}
         </DragOverlay>
       </SortableContext>

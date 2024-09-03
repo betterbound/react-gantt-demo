@@ -5,16 +5,15 @@ import DraggableBlockItem from './DraggableBlockItem'
 
 interface TableRow {
   bar: Gantt.Bar
-  isLastChild: boolean
   isActive?: boolean
 }
 
-const ObserverTableRow = ({ bar, isLastChild, isActive = false }: TableRow) => {
+const ObserverTableRow = ({ bar, isActive = false }: TableRow) => {
   return (
     <DraggableBlock
       id={bar.record.id}
     >
-      <DraggableBlockItem bar={bar} isLastChild={isLastChild} isActive={isActive} />
+      <DraggableBlockItem bar={bar} isActive={isActive} />
     </DraggableBlock>
   )
 
