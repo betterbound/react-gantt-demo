@@ -1,6 +1,7 @@
-import React from 'react';
-import GanttStore from './store';
-import { DefaultRecordType, Gantt } from './types';
+import type React from 'react';
+import type GanttStore from './store';
+import type { DefaultRecordType, Gantt } from './types';
+import type { ConvertedBarList } from './utils';
 export interface GanttContext<RecordType = DefaultRecordType> {
     prefixCls: string;
     store: GanttStore;
@@ -39,6 +40,7 @@ export interface GanttContext<RecordType = DefaultRecordType> {
     renderDaysText?: (barInfo: Gantt.Bar<RecordType>) => React.ReactNode;
     onExpand?: (record: Gantt.Record<RecordType>, collapsed: boolean) => void;
     onTimeAxisClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    orderedBarList?: (barList: ConvertedBarList) => void;
     showChangeBarSize?: boolean;
     canMoveBar?: boolean;
     timeAxisMinorStyle?: {};

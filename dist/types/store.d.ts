@@ -99,6 +99,7 @@ declare class GanttStore {
     setTranslateX(translateX: number): void;
     switchSight(type: Gantt.Sight): void;
     scrollToToday(): void;
+    updateBarListOrder(newOrder: Gantt.Bar[]): void;
     getTranslateXByDate(date: string): number;
     get todayTranslateX(): number;
     get scrollBarWidth(): number;

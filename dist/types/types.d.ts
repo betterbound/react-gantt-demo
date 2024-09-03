@@ -48,17 +48,21 @@ export declare namespace Gantt {
         translateY: number;
         stepGesture: string;
         invalidDateRange: boolean;
+        startDate: string | null;
+        endDate: string | null;
         dateTextFormat: (startX: number) => string;
         getDateWidth: (startX: number, endX: number) => string;
         task: Item<RecordType>;
         record: Record<RecordType>;
         loading: boolean;
+        children: Bar<RecordType>[];
         _group?: boolean;
         _collapsed: boolean;
         _depth: number;
         _index?: number;
         _childrenCount: number;
         _parent?: Item<RecordType>;
+        _parents?: Item<RecordType>[];
     }
     interface Item<RecordType = DefaultRecordType> {
         record: Record<RecordType>;
@@ -70,6 +74,7 @@ export declare namespace Gantt {
         group?: boolean;
         children?: Item<RecordType>[];
         _parent?: Item<RecordType>;
+        _parents?: Item<RecordType>[];
         _bar?: Bar<RecordType>;
         _depth?: number;
         _index?: number;
