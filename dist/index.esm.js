@@ -6887,7 +6887,7 @@ var DraggableBlockItem = function DraggableBlockItem(_ref2) {
         textAlign: column.align ? column.align : 'left',
         paddingLeft: index === 0 && tableIndent * (bar._depth + 1) + 10
       }, column.style)
-    }, column.name === 'dragButton' && /*#__PURE__*/React.createElement("button", _objectSpread2(_objectSpread2({
+    }, column.name === 'dragButton' && column.render(bar.record) !== null && /*#__PURE__*/React.createElement("button", _objectSpread2(_objectSpread2({
       type: 'button'
     }, listeners), {}, {
       style: {
