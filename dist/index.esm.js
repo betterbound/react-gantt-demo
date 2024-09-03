@@ -6887,7 +6887,7 @@ var DraggableBlockItem = function DraggableBlockItem(_ref2) {
         textAlign: column.align ? column.align : 'left',
         paddingLeft: index === 0 && tableIndent * (bar._depth + 1) + 10
       }, column.style)
-    }, column.name === 'dragButton' && column.render(bar.record) !== null && /*#__PURE__*/React.createElement("button", _objectSpread2(_objectSpread2({
+    }, column.name === 'dragButton' && column.render && column.render(bar.record) != null && /*#__PURE__*/React.createElement("button", _objectSpread2(_objectSpread2({
       type: 'button'
     }, listeners), {}, {
       style: {
@@ -6895,7 +6895,7 @@ var DraggableBlockItem = function DraggableBlockItem(_ref2) {
         pointerEvents: 'auto',
         touchAction: 'none'
       }
-    }), column.render ? column.render(bar.record) : 'drag'), index === 0 && bar._childrenCount > 0 && /*#__PURE__*/React.createElement(ExpandIcon, {
+    }), column.render(bar.record)), index === 0 && bar._childrenCount > 0 && /*#__PURE__*/React.createElement(ExpandIcon, {
       bar: bar,
       onExpand: onExpand,
       store: store,
