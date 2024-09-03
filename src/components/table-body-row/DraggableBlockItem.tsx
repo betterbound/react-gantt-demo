@@ -95,7 +95,7 @@ const DraggableBlockItem = ({
               ...column.style,
             }}
           >
-            {column.name === 'dragButton' && (
+            {column.name === 'dragButton' && column.render(bar.record) !== null &&(
               <button
                 type='button'
                 {...listeners}
