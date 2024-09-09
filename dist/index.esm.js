@@ -152,14 +152,6 @@ function getChildrenCount(barList) {
 } // MEMO: アプリ側へ渡すデータに変換する関数
 
 function convertBarList(barList, activeId, overId) {
-  var orderedBarIds = barList.map(function (bar) {
-    return bar.record.id;
-  });
-  var orderedBarList = {
-    ids: orderedBarIds,
-    depth: barList[0]._depth
-  };
-
   var parents = barList[0]._parents.map(function (parent, index) {
     return {
       id: parent.record.id,
@@ -168,7 +160,6 @@ function convertBarList(barList, activeId, overId) {
   });
 
   return {
-    orderedBarList: orderedBarList,
     activeId: activeId,
     overId: overId,
     parents: parents
