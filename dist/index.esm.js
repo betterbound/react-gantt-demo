@@ -5564,10 +5564,11 @@ var GanttStore = /*#__PURE__*/function () {
       var _ref2 = ((_b = this.mainElementRef.current) === null || _b === void 0 ? void 0 : _b.getBoundingClientRect()) || {
         top: 0
       },
-          top = _ref2.top; // 内容区高度
+          top = _ref2.top;
 
+      var flattenBarList = flattenDeep(this.getBarList); // 内容区高度
 
-      var contentHeight = this.getBarList.length * this.rowHeight;
+      var contentHeight = flattenBarList.length * this.rowHeight;
       var offsetY = event.clientY - top + scrollTop;
 
       if (offsetY - contentHeight > TOP_PADDING) {
