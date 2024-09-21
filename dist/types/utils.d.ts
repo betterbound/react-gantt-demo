@@ -8,10 +8,6 @@ interface ConvertBar {
     parents?: Gantt.Item[] | undefined;
 }
 export interface ConvertedBarList {
-    orderedBarList: {
-        ids: string[];
-        depth: number;
-    };
     activeId: string;
     overId: string;
     parents: {
