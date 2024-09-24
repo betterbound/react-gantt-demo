@@ -203,18 +203,29 @@ function createData(len: number) {
 }
 
 const App = () => {
-  const [data, setData] = useState(createData(30))
+  const [data, setData] = useState(createData(20))
   const handleClick = e => {
     console.log(e, e.currentTarget.value, e.currentTarget.innerText)
   }
-  console.log('data', data)
+
   return (
     <>
       <div style={{ width: '100%', height: 500 }}>
         <RcGantt<Data>
           data={data}
-          rowHeight={55}
+          rowHeight={80}
           columns={[
+            {
+              name: 'dragButton',
+              label: '並べ替え',
+              width: 55,
+              style: {
+                padding: 0,
+              },
+              render: (record) => {
+                return <>icon</>
+              },
+            },
             {
               name: 'hotTopic',
               label: 'HT',
@@ -234,7 +245,6 @@ const App = () => {
             {
               name: 'title',
               label: 'OutputGanttToggleButtons',
-              width: 100,
               render: record => {
                 return <p>{record.name}</p>
               },
@@ -301,7 +311,7 @@ const App = () => {
           timeAxisMinorStyle={{ color: '#006ec8' }}
           tableSize={{
             minWidth: 684,
-            maxWidth: 1080,
+            maxWidth: 2000,
           }}
         />
       </div>

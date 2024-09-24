@@ -16,7 +16,7 @@ import { HEADER_HEIGHT, TOP_PADDING } from './constants'
 import type { GanttLocale, GanttProps as GanttProperties } from './Gantt'
 import { defaultLocale } from './Gantt'
 import { Gantt } from './types'
-import { convertBar, convertItem, getChildrenCount, transverseData } from './utils'
+import { convertBar, convertItem, flattenDeep, getChildrenCount, transverseData } from './utils'
 
 dayjs.extend(weekday)
 dayjs.extend(weekOfYear)
@@ -735,8 +735,10 @@ class GanttStore {
     const { top } = this.mainElementRef.current?.getBoundingClientRect() || {
       top: 0,
     }
+    const flattenBarList = flattenDeep(this.getBarList)
+
     // 内容区高度
-    const contentHeight = this.getBarList.length * this.rowHeight
+    const contentHeight = flattenBarList.length * this.rowHeight
     const offsetY = event.clientY - top + scrollTop
     if (offsetY - contentHeight > TOP_PADDING) {
       this.showSelectionIndicator = false
