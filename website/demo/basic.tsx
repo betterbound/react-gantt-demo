@@ -27,7 +27,7 @@ const App = () => {
   console.log('data', data)
   return (
     <div style={{ width: '100%', height: 500 }}>
-      <RcGantt<Data>
+      {/* <RcGantt<Data>
         data={data}
         columns={[
           {
@@ -50,7 +50,7 @@ const App = () => {
           })
           return true
         }}
-      />
+      /> */}
     </div>
   )
 }

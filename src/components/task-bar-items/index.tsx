@@ -7,6 +7,7 @@ import './index.less'
 
 interface TaskBarProps {
   data: Gantt.Bar
+  translateY: number
   barItem: {
     id: string
     icon: JSX.Element
@@ -15,9 +16,9 @@ interface TaskBarProps {
   }
 }
 
-const TaskBarItems: React.FC<TaskBarProps> = ({ data, barItem }) => {
+const TaskBarItems: React.FC<TaskBarProps> = ({ data, barItem, translateY }) => {
   const { store, prefixCls } = useContext(Context)
-  const { loading, translateY } = data
+  const { loading } = data
 
   const prefixClsTaskBar = `${prefixCls}-task-bar`
 

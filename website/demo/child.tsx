@@ -36,7 +36,7 @@ const onExpand = (record, collapsed) => {
 
 const App = () => (
   <div style={{ width: '100%', height: 500 }}>
-    <RcGantt<Data>
+    {/* <RcGantt<Data>
       data={data}
       onExpand={onExpand}
       columns={[
@@ -46,7 +46,7 @@ const App = () => (
         },
       ]}
       onUpdate={async () => true}
-    />
+    /> */}
   </div>
 )
 
