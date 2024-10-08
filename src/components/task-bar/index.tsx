@@ -12,6 +12,7 @@ import './index.less'
 
 interface TaskBarProps {
   data: Gantt.Bar
+  translateY: number
 }
 
 interface RenderBarProps {
@@ -82,7 +83,7 @@ const RenderBar: React.FC<RenderBarProps> = ({ data }) => {
   )
 }
 
-const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
+const TaskBar: React.FC<TaskBarProps> = ({ data, translateY }) => {
   const {
     store,
     onBarClick,
@@ -98,7 +99,6 @@ const TaskBar: React.FC<TaskBarProps> = ({ data }) => {
   const {
     width,
     translateX,
-    translateY,
     invalidDateRange,
     stepGesture,
     dateTextFormat,

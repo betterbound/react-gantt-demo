@@ -13,7 +13,7 @@ const data = Array.from({ length: 100 }).fill({
 
 const App = () => (
   <div style={{ width: '100%', height: 500 }}>
-    <RcGantt<Data>
+    {/* <RcGantt<Data>
       locale={enUS}
       data={data}
       columns={[
@@ -30,6 +30,7 @@ const App = () => (
       allowAddBar={false}
       unit='week_in_month'
     />
+    /> */}
   </div>
 )
 

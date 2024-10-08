@@ -13,7 +13,7 @@ const data = Array.from({ length: 100 }).fill({
 
 const App = () => (
   <div style={{ width: '100%', height: 500 }}>
-    <RcGantt<Data>
+    {/* <RcGantt<Data>
       data={data}
       columns={[
         {
@@ -26,7 +26,7 @@ const App = () => (
         console.log('update', row, startDate, endDate)
         return true
       }}
-    />
+    /> */}
   </div>
 )
 

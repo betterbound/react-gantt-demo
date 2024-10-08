@@ -45,7 +45,7 @@ const dependencies: Gantt.Dependence[] = [
 
 const App = () => (
   <div style={{ width: '100%', height: 500 }}>
-    <RcGantt<Data>
+    {/* <RcGantt<Data>
       dependencies={dependencies}
       data={data}
       columns={[
@@ -55,7 +55,7 @@ const App = () => (
         },
       ]}
       onUpdate={async () => true}
-    />
+    /> */}
   </div>
 )
 
